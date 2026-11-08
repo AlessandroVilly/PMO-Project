@@ -1,0 +1,187 @@
+% !TEX root = main.tex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-images-captions}[2026/09/01]
+\ProcessOptions\relax
+
+% graphicx lo abbiamo caricato prima
+
+% --- Gestione Float e Didascalie (Niente float, subfig o subfigure) ---
+\RequirePackage{newfloat} % Sostituto moderno del pacchetto float
+\RequirePackage{caption}
+\RequirePackage{subcaption}
+\RequirePackage{graphicx}
+\RequirePackage{wrapfig}
+% Utilizziamo un formato custom per prevenire spazi vuoti iniziali , babel crea problemi con i default
+\DeclareCaptionLabelFormat{solonumero}{#2}
+
+% Configurazione caption sicura% SLIDE 359
+
+\captionsetup[figure]{
+    font=small,
+    labelfont=bf,
+    labelformat=solonumero, % Rimuove la parola "Figura"
+    labelsep=period,
+    justification=centerlast
+}
+
+\captionsetup[lstlisting]{
+    labelformat=solonumero, % Rimuove la parola "Figura"
+}
+% 1. Definizione dell'ambiente floating standard
+\DeclareFloatingEnvironment[
+    fileext=sch,
+    listname={Elenco degli Schemi},
+    name=Schema,
+    placement=htbp
+]{schema}
+
+% --- Tuning dei registri di spaziatura ---
+% I valori standard per 11pt sono tipicamente attorno a 20pt. 
+% Li riduciamo drasticamente per compattare il layout.
+
+\setlength{\textfloatsep}{10pt plus 2pt minus 4pt} 
+\setlength{\intextsep}{8pt plus 2pt minus 2pt}     
+\setlength{\floatsep}{8pt plus 2pt minus 2pt}       
+\setlength{\abovecaptionskip}{4pt}                  
+\setlength{\belowcaptionskip}{0pt}
+
+\ExplSyntaxOn
+
+\NewDocumentCommand{\image}{ O{htbp} O{width=\linewidth, keepaspectratio} m m o }
+  {
+    \str_if_eq:nnTF { #1 } { H }
+      {
+        % Ramo statico: bypassa la coda float e risolve il conflitto hypcap
+      \begin{center}
+        \begin{minipage}{\linewidth}
+          % Definisce l'ambiente come figura e disabilita hypcap per prevenire il warning
+          \captionsetup{type=figure, hypcap=false}
+          % Fissa l'ancoraggio ipertestuale alla sommità dell'immagine
+          \phantomsection
+          \centering
+          \includegraphics[#2]{#3}
+          % Utilizzo del comando nativo invece di \captionof
+          \caption{#4}
+          \IfNoValueTF{#5}{
+            \label{fig:#3}
+          }{
+            \label{#5}
+          }
+        \end{minipage}
+    \end{center}
+      }
+      {
+        % Ramo flottante: il pacchetto caption gestisce hypcap automaticamente
+        \begin{figure}[#1]
+          \centering
+          \includegraphics[#2]{#3}
+          \caption{#4}
+          \IfNoValueTF{#5}{
+            \label{fig:#3}
+          }{
+            \label{#5}
+          }
+        \end{figure}
+      }
+  }
+
+\ExplSyntaxOff
+
+% --- MACRO 2: Due immagini affiancate (Float) ---
+% #1 = Posizionamento (opzionale, default htbp)
+% #2 = Immagine SX
+% #3 = Didascalia SX
+% #4 = Label SX
+% #5 = Immagine DX
+% #6 = Didascalia DX
+% #7 = Label DX
+% #8 = Didascalia principale
+% #9 = Label principale
+\NewDocumentCommand{\dualimage}{ O{htbp} m m o m m o m o }{%
+    \begin{figure}[#1]
+        \centering
+        \begin{subfigure}[b]{0.48\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{#2}
+            \caption{#3}
+            \IfNoValueTF{#4}{%
+                \label{fig:#2}%
+            }{%
+                \label{#4}%
+            }%
+        \end{subfigure}\hfill
+        \begin{subfigure}[b]{0.48\linewidth}
+            \centering
+            \includegraphics[width=\linewidth]{#5}
+            \caption{#6}
+            \IfNoValueTF{#7}{%
+                \label{fig:#5}%
+            }{%
+                \label{#7}%
+            }%
+        \end{subfigure}
+        \caption{#8}
+        \IfNoValueTF{#9}{%
+                \label{dualfig:#2:#5}%
+            }{%
+                \label{#9}%
+            }%
+    \end{figure}%
+}
+
+% --- MACRO 3: Singola immagine per ambienti non flottanti ---
+% #1 = Chiavi graphicx (opzionale, default width=\linewidth, keepaspectratio)
+% #2 = Percorso immagine
+% #3 = Didascalia
+% #4 = Label
+\NewDocumentCommand{\innerimage}{ O{width=\linewidth, keepaspectratio} m m o }{%
+    \begin{center}
+        \begin{minipage}{\linewidth}
+          \captionsetup{type=figure}
+            \centering
+            \vspace{0.3em}
+            \includegraphics[#1]{#2}
+            \caption{#3}
+            \IfNoValueTF{#4}{%
+                \label{fig:#2}%
+            }{%
+                \label{#4}%
+            }%
+        \end{minipage}
+    \end{center}%
+}
+
+% --- MACRO 4: Due immagini affiancate per ambienti non flottanti ---
+% #1 = Larghezza subfigure (opzionale, default 0.48\linewidth)
+% #2 = Chiavi graphicx (opzionale, default width=\linewidth, keepaspectratio)
+% #3...#8 = Immagini, caption e label secondarie
+% #9 = Caption principale (che deve includere \label)
+\NewDocumentCommand{\innerdualimage}{ O{0.48\linewidth} O{width=\linewidth, keepaspectratio} m m o m m o m }{%
+    \begin{center}
+        \captionsetup{type=figure}
+        \begin{subfigure}[b]{#1}
+            \centering
+            \includegraphics[#2]{#3}
+            \caption{#4}
+            \IfNoValueTF{#5}{%
+                \label{fig:#3}%
+            }{%
+                \label{#5}%
+            }%
+        \end{subfigure}\hspace{0.04\linewidth}%
+        \begin{subfigure}[b]{#1}
+            \centering
+            \includegraphics[#2]{#6}
+            \caption{#7}
+            \IfNoValueTF{#8}{%
+                \label{fig:#6}%
+            }{%
+                \label{#8}%
+            }%
+        \end{subfigure}
+        
+        \vspace{0.25\baselineskip}
+        \captionof{figure}{#9}
+    \end{center}%
+}
+\endinput

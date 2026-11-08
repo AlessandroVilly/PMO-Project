@@ -1,0 +1,213 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-koma}[2026/09/05 Stile tipografico basato su KOMA-Script]
+
+% Controllo di compatibilità della classe documentale
+\@ifclassloaded{scrbook}
+  {}
+  {\PackageError{z3f-koma}{Questo pacchetto richiede la classe scrbook}{}}
+
+% Caricamento dei pacchetti fondamentali
+\RequirePackage{xcolor}
+
+% Gestione nativa delle testatine tramite il modulo KOMA
+\RequirePackage[automark]{scrlayer-scrpage}
+\clearpairofpagestyles
+\ohead{\pagemark}
+\ihead{\headmark}
+
+
+% Interfaccia chiave-valore per la geometria e la struttura
+\KOMAoptions{
+  BCOR=0pt, % Impostiamo i margini di rilegatura a zero per stampare la pagina del titolo
+  chapterprefix=true,
+  numbers=noenddot
+}
+
+\definecolor{ColoreCapitolo}{HTML}{3F4045}
+\definecolor{ColoreSezione}{HTML}{355691}
+\definecolor{ColoreSottoSezione}{HTML}{5F5AA2}
+\definecolor{ColoreSottoSottoSezione}{HTML}{413F54}
+\definecolor{ColoreTestoSecondario}{HTML}{30292F}
+
+\setkomafont{pageheadfoot}{\normalfont\sffamily\color{ColoreTestoSecondario}}
+\setkomafont{pagenumber}{\bfseries}
+\setkomafont{chapter}{\color{ColoreCapitolo}\sffamily\Huge\raggedleft}
+\setkomafont{chapterprefix}{\color{ColoreTestoSecondario}\large}
+\setkomafont{section}{\color{ColoreSezione}\sffamily\huge}
+\setkomafont{subsection}{\color{ColoreSottoSezione}\sffamily\LARGE}
+\setkomafont{subsubsection}{\color{ColoreSottoSottoSezione}\sffamily\Large}
+
+%%%%%%%%%%
+% TITOLO %
+%%%%%%%%%%
+
+\RequirePackage{graphicx}
+\RequirePackage[framemethod=TikZ]{mdframed}
+\RequirePackage[nomessages]{fp}
+% \RequirePackage{showframe} % for debugging borders
+
+%%%%%%%%%%%
+% COMANDI %
+%%%%%%%%%%%
+
+\newcommand*{\clearpar}{\unskip\par} % or \unskip\strut\par
+
+\newcommand*{\countlines}[1]{% saves the number of lines of #1 in \numlines
+  \setbox0\vbox{%
+    \noindent{#1}\par
+    \count@\z@
+    \loop
+    \unskip\unpenalty\unskip\unpenalty\unskip
+    \setbox0\lastbox
+    \ifvoid0
+       \xdef\numlines{\the\count@}%
+    \else
+       \advance\count@\@ne
+    \repeat
+  }%
+}
+
+\newcommand*{\adjustheight}{% saves the height of the top and bottom mini-pages in \miniheight
+  \countlines{\bfseries\huge\@title}%
+  \FPeval{\miniheight}{0.40 - 0.04 * (\numlines - 1)}%
+}
+
+%%%%%%%%%
+% CAMPI %
+%%%%%%%%%
+
+\newif\ifLogo
+\newif\ifInstitute
+\newif\ifFaculty
+\newif\ifDepartment
+\newif\ifSubtitle
+\newif\ifSupervisor
+\newif\ifContext
+\newif\ifDate
+
+\newcommand*{\logo}[1]{\gdef\@logo{#1}\global\Logotrue}
+\newcommand*{\institute}[1]{\gdef\@institute{#1}\global\Institutetrue}
+\newcommand*{\faculty}[1]{\gdef\@faculty{#1}\global\Facultytrue}
+\newcommand*{\department}[1]{\gdef\@department{#1}\global\Departmenttrue}
+\newcommand*{\supervisor}[1]{\gdef\@supervisor{#1}\global\Supervisortrue}
+\newcommand*{\context}[1]{\gdef\@context{#1}\global\Contexttrue}
+
+%%%%%%%%%%%%%%%%%%%%%
+% PAGINA DEL TITOLO %
+%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+\areaset[0pt]{160mm}{247mm} % margini pagina titolo
+\renewcommand*{\maketitle}{%
+\newcommand{\originalcleardoublepage}{}
+\let\originalcleardoublepage\cleardoubleoddpage
+\let\cleardoubleoddpage\clearpage
+\KOMAoptions{twoside=false}
+  \begin{titlepage}%
+    % 1. Impostiamo la geometria specifica per questa pagina
+    % 2. Reset totale dei parametri di spaziatura parassita
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\headheight}{0pt}
+    \setlength{\footskip}{0pt}
+    
+    % Centratura globale della pagina
+    \centering
+
+    % --- BLOCCO SUPERIORE ---
+    % Inseriamo il contenuto senza minipage avvolgenti inutili
+    \vspace*{0.5cm} % Piccolo margine superiore di sicurezza
+    
+    \ifLogo
+      \includegraphics[height=0.15\textheight, keepaspectratio]{\@logo}\par
+      \vspace{1.5cm plus 1cm minus 1cm} % Spazio elastico sotto il logo
+    \else
+      \vspace*{1cm} % Se non c'è logo, spazio vuoto
+    \fi
+
+    {\scshape
+      \ifInstitute\LARGE\@institute\par\fi
+      \ifFaculty
+        \ifInstitute\vspace{0.5em}\fi % Spazio ridotto tra istituto e facoltà
+        \Large\@faculty\par
+      \fi
+      \ifDepartment\vspace{0.5em}\large\@department\par\fi
+    }
+
+    \vfill % <--- PRIMA MOLLA (Spinge il titolo verso il centro/basso)
+
+    % --- TITOLO ---
+    % mdframed gestisce il suo spazio. 
+    % userdefinedwidth=\dimexpr\textwidth-4pt\relax compensa lo spessore delle linee per evitare Overfull hbox
+    \begin{mdframed}[%
+      linewidth=2pt,
+      innertopmargin=1.5em,
+      innerbottommargin=1.5em,
+      leftline=false,
+      rightline=false,
+      userdefinedwidth=\textwidth, 
+      align=center,
+      skipabove=0pt,
+      skipbelow=0pt]
+      \centering
+      {\bfseries\huge\@title\par}
+    \end{mdframed}
+
+    \vfill % <--- SECONDA MOLLA (Spinge il footer in basso)
+
+    % --- BLOCCO INFERIORE ---
+    \ifSubtitle
+      {\Large\@subtitle\par}
+      \vspace{1.5cm plus 1cm minus 1cm}
+    \fi
+    
+    \ifSupervisor
+      % Usiamo una tabella invisibile invece di minipage affiancate 
+      % (più stabile per l'allineamento)
+      \vspace{1cm}
+      \noindent
+      \begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+        %{\large \textbf{Candidato:}} & {\large \textbf{Relatore:}} \\
+        {\large \@author} & {\large \@supervisor}
+      \end{tabular*}
+    \else
+      {\large\@author\par}
+    \fi
+
+    \vfill 
+    \begin{minipage}{\textwidth}
+      \centering
+      \ifContext
+      {\large\@context\par}
+      \fi
+      \ifDate
+        {\large\@date\par}
+      \fi
+    \end{minipage}
+    
+    \vspace*{0cm} % Margine inferiore di sicurezza
+
+  \end{titlepage}%
+
+\clearpage
+\thispagestyle{empty}  % rimuove numero pagina SOLO su questa pagina
+\vspace*{\fill}
+\begin{center}
+  {\Fontauri Vi prego, non cucinatemi, gentili signori! Io sono un ottimo cuoco in persona, e cucino meglio di quanto cucino, se capite cosa intendo...}\\[1.5ex]
+  {\wela Bilbo ai 3 troll di caverna.}
+\end{center}
+\vspace*{\fill}
+
+\clearpage
+
+\KOMAoptions{twoside=true}
+
+% areaset prende {BCOR = spazio rilegatura}{TEXTWIDTH}{TEXTHEIGHT} -> margini default, deve rimanere ultimo
+\areaset[15mm]{145mm}{265mm}
+
+\let\cleardoubleoddpage\originalcleardoublepage  % ripristina (va salvato prima)
+
+\cleardoubleoddpage
+
+}
+\makeatother
+\endinput

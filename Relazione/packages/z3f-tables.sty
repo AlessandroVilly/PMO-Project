@@ -1,0 +1,72 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-tables}[2026/08/19 v1.0 Pacchetto per tabelle centrate professionali]
+
+%%%%%%%%%%%
+% TABELLE %
+%%%%%%%%%%%
+
+\RequirePackage{booktabs}
+% \RequirePackage{tabularx}
+\RequirePackage{xltabular}  % Unisce longtable e tabularx
+\RequirePackage[column=C]{cellspace}
+\setlength{\cellspacetoplimit}{0pt}
+\setlength{\cellspacebottomlimit}{0pt}
+% > "inietta" il il comando prima della cella
+\RequirePackage{makecell}
+\RequirePackage{array}
+\RequirePackage{multirow}
+\RequirePackage{multicol}
+\RequirePackage[export]{adjustbox}
+\renewcommand{\arraystretch}{1.1}
+\RequirePackage{caption}  % Per il comando \captionof in ambienti non flottanti
+\RequirePackage{array}    % Per la gestione avanzata delle colonne
+\RequirePackage{ragged2e}
+
+\NewDocumentEnvironment{theoremtable}{ o m }
+ {%
+  \par\addvspace{\medskipamount}
+  \noindent\begin{minipage}{\linewidth}
+  \centering
+  \IfValueT{#1}{%
+    % Disattiva localmente hypcap per ambienti non flottanti
+    \captionsetup{hypcap=false}%
+    \captionof{table}{#1}\vspace{\abovecaptionskip}%
+  }
+  \begin{tabular}{#2}
+  \toprule
+ }
+ {%
+  \bottomrule
+  \end{tabular}
+  \end{minipage}
+  \par\addvspace{\medskipamount}
+ }
+
+\newcolumntype{L}{>{\RaggedRight\arraybackslash}X}
+\newcolumntype{Z}{>{\Centering\arraybackslash}X}% C è già definito
+\newcolumntype{R}{>{\RaggedLeft\arraybackslash}X}
+
+% Ridefinizione dell'ambiente:
+% L'argomento +b (il 5° argomento) cattura l'intero contenuto 
+% inserito dall'utente tra \begin{proftable} e \end{proftable}
+\NewDocumentEnvironment{proftable}{ O{htbp} m m m +b }
+ {
+  \begin{savenotes}
+    \begin{table}[#1]
+      \centering
+      \label{#4}
+      \begin{tabularx}{\textwidth}{#2}
+        \toprule
+        % Iniezione del corpo dell'ambiente catturato dal parser
+        #5
+        \bottomrule
+      \end{tabularx}
+      \caption{#3}
+    \end{table}
+  \end{savenotes}
+ }
+ {
+  % Il blocco di chiusura rimane vuoto poiché l'ambiente 
+  % è stato integralmente renderizzato nel blocco di apertura
+ }
+\endinput

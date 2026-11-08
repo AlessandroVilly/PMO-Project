@@ -1,0 +1,31 @@
+#include <stdio.h>      /* for printf fprintf */
+#include <sys/types.h>  /* for pid_t */
+#include <unistd.h>     /* for fork() */
+#include <stdlib.h>     /* for exit() */
+
+int main(void) {
+
+  pid_t pid;     /* variabile per memorizzare il PID del processo */
+
+  pid = fork();  /* creazione processo figlio */
+
+  /* ho due processi identici che continuano ad eseguire da qui */
+  /* controllo il pid per distinguere il padre dal figlio */
+  if(pid < 0){
+    /* errore nell’esecuzione della fork */
+    fprintf(stderr, "Generazione processo fallita...");
+    exit(1);
+  }else if (pid == 0){
+    /* questo codice verra’ eseguito solo dal figlio */
+    printf("Io sono il figlio con PID %d e PPID %d\n",
+            getpid(), getppid());
+  }else {
+      /* questo codice lo esegue solo il processo padre */
+      printf("Io sono il processo padre con PID %d\n", getpid());
+      printf("Mio figlio ha PID %d\n", pid);
+  }
+  /* tutte le righe di codice che inserisco qua sarranno eseguite
+    sia dal padre che dal figlio */
+  printf("Processo con PID %d termina l’esecuzione\n", getpid());
+  exit(0);
+}

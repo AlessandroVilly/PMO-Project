@@ -1,0 +1,93 @@
+% !TEX program = lualatex
+% !TEX root = main.tex
+%%%%%%%%%%%%%
+% PACCHETTI %
+%%%%%%%%%%%%%
+% Mantenere questo ordine.
+\ProvidesPackage{z3f-preamble}[2026-09-01]
+
+\RequirePackage{z3f-glob}%              Generic settings
+\RequirePackage{z3f-koma}% new document style
+%\RequirePackage{z3f-stylepage-legacy}%        Cover settings
+\RequirePackage{z3f-listings}%     Code styling and syntax
+\RequirePackage{z3f-theorems}%     Mathematics
+\RequirePackage{z3f-traslations}%  Traslations
+%\RequirePackage[debug=false]{z3f-debug}% Attivazione debug
+\RequirePackage{z3f-images-captions}%
+\RequirePackage{z3f-tables}
+\RequirePackage[hidelinks]{hyperref}% hidelinks resetta lo stile, per impostarlo poi
+
+\definecolor{urlcolor}{rgb}{0.4,0.2,0.6}% colore degli hyperlink
+
+%%%%%%%%%
+% COVER %
+%%%%%%%%%
+
+\logo{logo.png}
+\institute{Università degli studi di Urbino Carlo Bo}
+\faculty{Informatica Applicata}
+\department{Dipartimento di scienze pure ed applicate}
+\title{Relazione Progetto Programmazione Modellazione ad Oggetti}
+\author{ Ale Davide}
+\supervisor{ Kamy Luca }
+\context{}
+\Datetrue %commetare per rimuovere la data
+\date{\textsc{Ultima revisione: \today}}
+
+%%%%%%%%%%%%%%%%
+% IMPOSTAZIONI %
+%%%%%%%%%%%%%%%%
+
+\RequirePackage{bookmark}
+\bookmarksetup{
+  open=true,
+  openlevel=1,    % Apre l'albero dei segnalibri all'apertura del PDF
+  numbered        % Include i numeri delle sezioni nei segnalibri
+}
+\graphicspath{{./resources/images/}}
+
+\newcommand{\noskipcaption}[1]{\caption{#1}\vspace{-1em}} % caption without additional vertical space
+
+% IMMAGINI
+\setcounter{topnumber}{5} % nr di immagini top pagina
+\setcounter{bottomnumber}{5} % nr di immagini bottom pagina
+\setcounter{totalnumber}{10} % nr di immagini tot
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.85}
+
+%%%%%%%%%%%%%
+% LINGUAGGI %
+%%%%%%%%%%%%%
+\lstloadlanguages{C, Python, C++, Java, SQL}
+
+%%%%%%%%%%%%%%%%
+% BIBLIOGRAFIA %
+%%%%%%%%%%%%%%%%
+
+\addbibresource{./resources/bib/references.bib}
+
+%%%%%%%%%
+% LINKS % 
+%%%%%%%%%
+% Vanno dopo il preambolo: da non spostare.
+
+\definecolor{ColoreLinks}{HTML}{3D5A99}
+
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    linkcolor=ColoreLinks,
+    urlcolor=urlcolor,
+    pdfauthor={Luca Martinangeli}
+    pdfsubject={Appunti di}, % oggetto
+    pdfkeywords={}, % Parole chiave
+    pdfcreator={LaTeX},
+    pdfproducer={lualatex}, % Compilatore
+    pdflang={it-IT},
+    pdfstartview={XYZ null null FitH},
+    }%
+\RequirePackage{footnotehyper}% Per compatibilità con hyperref
+\RequirePackage[capitalize, noabbrev, italian]{cleveref}
+\endinput

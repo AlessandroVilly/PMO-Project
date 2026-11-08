@@ -1,0 +1,127 @@
+% !TEX root = main.tex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-theorems}[2026/05/07]
+
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%
+% REQUISITI %
+%%%%%%%%%%%%%
+
+\RequirePackage{amsthm}
+\RequirePackage{tcolorbox}
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{luacolor}
+\tcbuselibrary{skins, theorems, breakable}
+\RequirePackage{z3f-traslations}
+
+%%%%%%%%%%%%
+% STILE %
+%%%%%%%%%%%%
+
+% Leting proof go
+\let\proof\relax
+\let\endproof\relax
+
+% QED symbol
+\renewcommand{\qedsymbol}{\faCheckSquare[regular]}
+\newcommand\qedadd{\pushQED{\qed}\popQED}
+
+%%%%%%%%%%%
+% TEOREMI %
+%%%%%%%%%%%
+
+\definecolor{ColoreDefinizione}{HTML}{E31A1C}
+\definecolor{ColoreTeorema}{HTML}{1F78B4}
+\definecolor{ColoreIpotesi}{HTML}{33A02C}
+\definecolor{ColoreMetodo}{HTML}{FF7F00}
+\definecolor{ColoreQuesito}{HTML}{6A3D9A}
+\definecolor{ColoreEsempio}{HTML}{B15928}
+\definecolor{ColoreNota}{HTML}{00BFC4}
+\definecolor{ColorePasso}{HTML}{E7298A}
+\definecolor{ColoreProprieta}{HTML}{7F7F00}
+\definecolor{ColoreDimostrazione}{HTML}{08306B}
+\definecolor{ColoreProposizione}{HTML}{F781BF}
+\definecolor{ColoreLemma}{HTML}{8C510A}
+\definecolor{ColoreOsservazione}{HTML}{4D4D4D}
+
+\ExplSyntaxOn
+
+% 1. Creazione di un contatore dedicato per i box, necessario per l'espansione corretta delle variabili
+\newcounter{sharedbox}
+
+% 2. Vincolo del contatore alla sezione (es. produce 1.1, 1.2, 2.1)
+\counterwithin{sharedbox}{chapter}
+\renewcommand{\thesharedbox}{\thechapter.\arabic{sharedbox}}
+
+% 1. Definizione della macro generatrice (Template dell'environment)
+% \cs_new_protected:Npn crea una funzione robusta (non espandibile prematuramente)
+\cs_new_protected:Npn \__setup_custom_theorem:nnn #1#2#3
+  {
+    % #1 = Titolo stampato (es. Definizione)
+    % #2 = Nome del token/environment (es. definizione)
+    % #3 = Colore base (es. blue)
+      \NewDocumentEnvironment{#2}{ O{} }
+      {
+        % Invocazione a runtime: i token vengono espansi solo nel punto esatto del documento
+        \begin{tcolorbox}[
+          step=sharedbox, % Gestisce \refstepcounter in automatico. (NON inserire 'step')
+          enhanced,
+          breakable,
+          fonttitle=\bfseries,
+          coltitle=white,
+          lines~before~break=0,
+          boxrule=1pt,
+          leftrule=5pt,
+          arc=0mm,
+          top=1em,
+          bottom=1em,
+          colback=#3!5!white,
+          colframe=#3!80!black,
+          drop~fuzzy~shadow,
+          title={#1~\thesharedbox\ifstrempty{##1}{}{:\space##1}},
+          label={#2:\thesharedbox}, % In questo contesto, tcolorbox protegge il label dai salti pagina
+          label~type={#2}
+        ]
+    }
+    {
+      \end{tcolorbox}
+    }
+  }
+
+% 2. Esecuzione del For Loop (Mappatura della lista)
+\clist_map_inline:nn
+  {
+    % Inserire qui la lista delle tuple: {Titolo} {nome_env} {colore}
+    {Definizione}   {definizione}   {ColoreDefinizione},
+    {Teorema}       {teorema}       {ColoreTeorema},
+    {Ipotesi}       {ipotesi}       {ColoreIpotesi},
+    {Metodo}        {metodo}        {ColoreMetodo},
+    {Quesito}       {quesito}       {ColoreQuesito},
+    {Esempio}       {esempio}       {ColoreEsempio},
+    {Nota}          {nota}          {ColoreNota},
+    {Passo}         {passo}         {ColorePasso},
+    {Proprietà}     {proprieta}     {ColoreProprieta},
+    {Dimostrazione} {dimostrazione} {ColoreDimostrazione},
+    {Proposizione}  {proposizione}  {ColoreProposizione},
+    {Lemma}         {lemma}         {ColoreLemma},
+    {Osservazione}  {osservazione}  {ColoreOsservazione}
+  }
+  {
+    % Il parametro #1 all'interno del loop rappresenta la singola tupla.
+    % Viene passata alla macro generatrice, che la esplode nei tre argomenti.
+    \__setup_custom_theorem:nnn #1
+  }
+
+\ExplSyntaxOff
+
+%% PER L'INDICE %%
+
+\NewDocumentCommand{\elencoteoremi}{}{%
+    % Il parametro opzionale [\section*] adatta l'intestazione alla classe article.
+    % Se il pacchetto supporta classi 'book' o 'report', omettere il parametro 
+    % opzionale o sostituirlo con [\chapter*].
+    % se si vuole includere altra "roba" basta inserire "list inside=tcbthm" dentro il nome del teorema
+    \tcblistof[\section*]{tcbthm}{Teoremi/Definizioni/Osservazioni}
+}
+\endinput

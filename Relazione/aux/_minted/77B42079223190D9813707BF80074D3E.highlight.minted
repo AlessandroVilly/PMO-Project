@@ -1,0 +1,33 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}stdio.h\PYGZgt{}}\PYG{c+c1}{      /* for printf fprintf */}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}sys/types.h\PYGZgt{}}\PYG{c+c1}{  /* for pid\PYGZus{}t */}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}unistd.h\PYGZgt{}}\PYG{c+c1}{     /* for fork() */}
+\PYG{c+cp}{\PYGZsh{}include}\PYG{+w}{ }\PYG{c+cpf}{\PYGZlt{}stdlib.h\PYGZgt{}}\PYG{c+c1}{     /* for exit() */}
+
+\PYG{k+kt}{int}\PYG{+w}{ }\PYG{n+nf}{main}\PYG{p}{(}\PYG{k+kt}{void}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+
+\PYG{+w}{  }\PYG{k+kt}{pid\PYGZus{}t}\PYG{+w}{ }\PYG{n}{pid}\PYG{p}{;}\PYG{+w}{     }\PYG{c+cm}{/* variabile per memorizzare il PID del processo */}
+
+\PYG{+w}{  }\PYG{n}{pid}\PYG{+w}{ }\PYG{o}{=}\PYG{+w}{ }\PYG{n}{fork}\PYG{p}{();}\PYG{+w}{  }\PYG{c+cm}{/* creazione processo figlio */}
+
+\PYG{+w}{  }\PYG{c+cm}{/* ho due processi identici che continuano ad eseguire da qui */}
+\PYG{+w}{  }\PYG{c+cm}{/* controllo il pid per distinguere il padre dal figlio */}
+\PYG{+w}{  }\PYG{k}{if}\PYG{p}{(}\PYG{n}{pid}\PYG{+w}{ }\PYG{o}{\PYGZlt{}}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)\PYGZob{}}
+\PYG{+w}{    }\PYG{c+cm}{/* errore nell’esecuzione della fork */}
+\PYG{+w}{    }\PYG{n}{fprintf}\PYG{p}{(}\PYG{n}{stderr}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}Generazione processo fallita...\PYGZdq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}\PYG{k}{else}\PYG{+w}{ }\PYG{k}{if}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{pid}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{)\PYGZob{}}
+\PYG{+w}{    }\PYG{c+cm}{/* questo codice verra’ eseguito solo dal figlio */}
+\PYG{+w}{    }\PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Io sono il figlio con PID \PYGZpc{}d e PPID \PYGZpc{}d}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}
+\PYG{+w}{            }\PYG{n}{getpid}\PYG{p}{(),}\PYG{+w}{ }\PYG{n}{getppid}\PYG{p}{());}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}\PYG{k}{else}\PYG{+w}{ }\PYG{p}{\PYGZob{}}
+\PYG{+w}{      }\PYG{c+cm}{/* questo codice lo esegue solo il processo padre */}
+\PYG{+w}{      }\PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Io sono il processo padre con PID \PYGZpc{}d}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{getpid}\PYG{p}{());}
+\PYG{+w}{      }\PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Mio figlio ha PID \PYGZpc{}d}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{pid}\PYG{p}{);}
+\PYG{+w}{  }\PYG{p}{\PYGZcb{}}
+\PYG{+w}{  }\PYG{c+cm}{/* tutte le righe di codice che inserisco qua sarranno eseguite}
+\PYG{c+cm}{    sia dal padre che dal figlio */}
+\PYG{+w}{  }\PYG{n}{printf}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Processo con PID \PYGZpc{}d termina l’esecuzione}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{getpid}\PYG{p}{());}
+\PYG{+w}{  }\PYG{n}{exit}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{);}
+\PYG{p}{\PYGZcb{}}
+\end{MintedVerbatim}

@@ -1,0 +1,258 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-stylepage-legacy}[2026/09/05 Stile tipografico basato su classi standard]
+
+\RequirePackage{geometry}
+\RequirePackage[explicit]{titlesec}
+\RequirePackage{fancyhdr}
+\RequirePackage[parfill]{parskip}
+\RequirePackage{pgfornament}
+\RequirePackage{pgfornament-han}
+
+% Usando il package showframe, si possono mostrare i bordi della pagina %
+% \RequirePackage{showframe}
+\geometry{ marginparwidth = 0mm,
+           marginparsep = 0mm,
+           headsep = 3mm,
+           footskip = 15pt, % minimo sindacale per footskip
+           top=10mm,
+           bottom=10mm,
+           right=10mm,
+           left=10mm}
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{15pt}
+\addtolength{\topmargin}{-2.49998pt}
+% Definizione del token tipografico per il filetto centrato verticalmente
+% I parametri height e depth regolano rispettivamente lo spessore e l'elevazione
+\newcommand{\midlinefill}{\leavevmode\leaders\hrule height 0.7ex depth -0.5ex\hfill}
+% Disattivazione esplicita dei filetti continui nativi di fancyhdr
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Ridefinizione del token \chaptermark per iniettare l'etichetta, il numero e il nome
+\renewcommand{\chaptermark}[1]{\markboth{\thechapter\ \triangleright \ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+% Iniezione del layout nell'intestazione (Header)
+% \makebox[\headwidth] costringe il contenuto a occupare l'esatta larghezza della gabbia di testo
+% \quad fornisce una spaziatura rigida tra il filetto elastico e il contenuto testuale
+\fancyhead[C]{%
+  \makebox[\headwidth]{\raisebox{0.14em}{\pgfornamenthan[height=0.8em, symmetry=c]{70}}~\midlinefill\quad{\leftmark \ \triangleright \ \rightmark}\quad\midlinefill~\raisebox{0.14em}{\pgfornamenthan[height=0.8em, symmetry=h]{70}}}%
+}
+
+% Iniezione del layout nel piè di pagina (Footer)
+\fancyfoot[C]{%
+  \makebox[\headwidth]{\raisebox{0.34em}{\pgfornamenthan[height=0.8em, symmetry=v]{70}}~\midlinefill\quad\thepage\quad\midlinefill~\raisebox{0.34em}{\pgfornamenthan[height=0.8em]{70}}}%
+}
+
+% 1. RIDEFINIAMO IL FORMATO (Obbligatorio per far funzionare la spaziatura)
+% Questo replica lo stile standard "Capitolo X" a capo "Titolo"
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\centering} % Stile generale
+  {\raisebox{0.65ex}{{\pgfornament[height=0.8em]{11}}} Capitolo \thechapter~\raisebox{0.65ex}{\pgfornament[height=0.8em]{14}}}          % Etichetta (es. "Capitolo 1")
+  {0pt}           % Spazio tra "Capitolo 1" e "Titolo del capitolo"
+  {#1}            % Stile del titolo vero e proprio
+
+% 2. RIDEFINIAMO LA SPAZIATURA (Qui riduciamo lo spazio)
+\titlespacing*{\chapter}
+  {0pt} % Spazio a sinistra
+  {0pt} % Spazio PRIMA del titolo (dall'alto della pagina)
+  {3pt} % <--- SPAZIO DOPO IL TITOLO
+
+% --- Configurazione \section ---
+\titleformat{\section}
+  {\normalfont\LARGE\bfseries\centering}
+  {\raisebox{0.55ex}{\pgfornament[height=0.6em]{3}}~\thesection :~}
+  {0pt}            % Spazio orizzontale tra numero e testo del titolo
+  {#1 \raisebox{0.55ex}{\pgfornament[height=0.6em, symmetry=v]{3}}}
+  
+\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+
+% --- Configurazione \subsection ---
+\titleformat{\subsection}
+  {\normalfont\Large\bfseries\centering}
+  {\raisebox{0.55ex}{\pgfornament[height=0.4em]{2}}~}
+  {0pt}
+  {#1~\raisebox{0.55ex}{\pgfornament[height=0.4em, symmetry=v]{2}}}
+  
+\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% --- Configurazione \subsubsection ---
+% La forma [runin] formatta il titolo come parte del paragrafo (sulla stessa riga del testo)
+\titleformat{\subsubsection}
+  {\normalfont\large\bfseries\centering}
+  {\thesubsubsection}
+  {0pt}
+  {#1}                       % Aggiunge spazio (quad) dopo il titolo, prima del testo
+  
+\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{0.75ex plus .1ex}
+
+
+%%%%%%%%%%
+% TITOLO %
+%%%%%%%%%%
+
+\RequirePackage{graphicx}
+\RequirePackage[framemethod=TikZ]{mdframed}
+\RequirePackage[nomessages]{fp}
+
+%%%%%%%%%%%
+% COMANDI %
+%%%%%%%%%%%
+
+\newcommand*{\clearpar}{\unskip\par} % or \unskip\strut\par
+
+\newcommand*{\countlines}[1]{% saves the number of lines of #1 in \numlines
+  \setbox0\vbox{%
+    \noindent{#1}\par
+    \count@\z@
+    \loop
+    \unskip\unpenalty\unskip\unpenalty\unskip
+    \setbox0\lastbox
+    \ifvoid0
+       \xdef\numlines{\the\count@}%
+    \else
+       \advance\count@\@ne
+    \repeat
+  }%
+}
+
+\newcommand*{\adjustheight}{% saves the height of the top and bottom mini-pages in \miniheight
+  \countlines{\bfseries\huge\@title}%
+  \FPeval{\miniheight}{0.40 - 0.04 * (\numlines - 1)}%
+}
+
+%%%%%%%%%
+% CAMPI %
+%%%%%%%%%
+
+\newif\ifLogo
+\newif\ifInstitute
+\newif\ifFaculty
+\newif\ifDepartment
+\newif\ifSubtitle
+\newif\ifSupervisor
+\newif\ifContext
+\newif\ifDate
+
+\newcommand*{\logo}[1]{\gdef\@logo{#1}\global\Logotrue}
+\newcommand*{\institute}[1]{\gdef\@institute{#1}\global\Institutetrue}
+\newcommand*{\faculty}[1]{\gdef\@faculty{#1}\global\Facultytrue}
+\newcommand*{\department}[1]{\gdef\@department{#1}\global\Departmenttrue}
+\newcommand*{\subtitle}[1]{\gdef\@subtitle{#1}\global\Subtitletrue}
+\newcommand*{\supervisor}[1]{\gdef\@supervisor{#1}\global\Supervisortrue}
+\newcommand*{\context}[1]{\gdef\@context{#1}\global\Contexttrue}
+\renewcommand*{\date}[1]{\gdef\@date{#1}\global\Datetrue}
+
+%%%%%%%%%%%%%%%%%%%%%
+% PAGINA DEL TITOLO %
+%%%%%%%%%%%%%%%%%%%%%
+\makeatletter
+
+\renewcommand*{\maketitle}{%
+  \begin{titlepage}%
+    % 1. Impostiamo la geometria specifica per questa pagina
+    \newgeometry{left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm}%
+    
+    % 2. Reset totale dei parametri di spaziatura parassita
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\headheight}{0pt}
+    \setlength{\footskip}{0pt}
+    
+    % Centratura globale della pagina
+    \centering
+
+    % --- BLOCCO SUPERIORE ---
+    % Inseriamo il contenuto senza minipage avvolgenti inutili
+    \vspace*{0.5cm} % Piccolo margine superiore di sicurezza
+    
+    \ifLogo
+      \includegraphics[height=0.15\textheight, keepaspectratio]{\@logo}\par
+      \vspace{1.5cm plus 1cm minus 1cm} % Spazio elastico sotto il logo
+    \else
+      \vspace*{1cm} % Se non c'è logo, spazio vuoto
+    \fi
+
+    {\scshape
+      \ifInstitute\LARGE\@institute\par\fi
+      \ifFaculty
+        \ifInstitute\vspace{0.5em}\fi % Spazio ridotto tra istituto e facoltà
+        \Large\@faculty\par
+      \fi
+      \ifDepartment\vspace{0.5em}\large\@department\par\fi
+    }
+
+    \vfill % <--- PRIMA MOLLA (Spinge il titolo verso il centro/basso)
+
+    % --- TITOLO ---
+    % mdframed gestisce il suo spazio. 
+    % userdefinedwidth=\dimexpr\textwidth-4pt\relax compensa lo spessore delle linee per evitare Overfull hbox
+    \begin{mdframed}[%
+      linewidth=2pt,
+      innertopmargin=1.5em,
+      innerbottommargin=1.5em,
+      leftline=false,
+      rightline=false,
+      userdefinedwidth=\textwidth, 
+      align=center,
+      skipabove=0pt,
+      skipbelow=0pt]
+      \centering
+      {\bfseries\huge\@title\par}
+    \end{mdframed}
+
+    \vfill % <--- SECONDA MOLLA (Spinge il footer in basso)
+
+    % --- BLOCCO INFERIORE ---
+    \ifSubtitle
+      {\Large\@subtitle\par}
+      \vspace{1.5cm plus 1cm minus 1cm}
+    \fi
+    
+    \ifSupervisor
+      % Usiamo una tabella invisibile invece di minipage affiancate 
+      % (più stabile per l'allineamento)
+      \vspace{1cm}
+      \noindent
+      \begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}r@{}}
+        %{\large \textbf{Candidato:}} & {\large \textbf{Relatore:}} \\
+        {\large \@author} & {\large \@supervisor}
+      \end{tabular*}
+    \else
+      {\large\@author\par}
+    \fi
+
+    \vfill 
+    \begin{minipage}{\textwidth}
+      \centering
+      \ifContext
+      {\large\@context\par}
+    \fi
+    \ifDate
+      {\large\@date\par}
+    \fi
+    \end{minipage}
+    
+    \vspace*{0cm} % Margine inferiore di sicurezza
+
+  \end{titlepage}%
+  \restoregeometry
+}
+\makeatother
+
+
+%%%%%%%%%
+% COVER %
+%%%%%%%%%
+
+\logo{logo.png}
+\institute{Università degli studi di Urbino Carlo Bo}
+\faculty{Informatica Applicata}
+\department{Dipartimento di scienze pure ed applicate}
+\title{Appunti di Basi di dati}
+\author{}
+\supervisor{}
+\context{}
+\date{\textsc{Luca Martinangeli\\Ultima revisione: \today}}
+
+\endinput

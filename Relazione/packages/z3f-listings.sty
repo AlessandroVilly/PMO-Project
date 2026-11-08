@@ -1,0 +1,416 @@
+% !TEX root = main.tex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-listings}[2026/09/01]
+\ProcessOptions\relax
+%%%%%%%%%%%%%
+% REQUISITI %
+%%%%%%%%%%%%%
+
+\RequirePackage{listings}
+\RequirePackage[many]{tcolorbox}
+\RequirePackage{xcolor}
+\RequirePackage{graphics}
+\RequirePackage{calc}
+\tcbuselibrary{skins, listings, xparse}
+
+%%%%%%%%%%
+% COLORI %
+%%%%%%%%%%
+
+\def\ForestGreen{\color[HTML]{228B22}}
+\def\TrueBlue{\color[HTML]{0000FF}}
+\def\VeronicaPurple{\color[HTML]{A020F0}}
+\def\FreeSpeechRed{\color[HTML]{DD0000}}
+\def\SafetyOrange{\color[HTML]{FF7700}}
+\def\DarkMagenta{\color[HTML]{900090}}
+\def\IslamicGreen{\color[HTML]{00AA00}}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.96}
+\definecolor{codeorange}{HTML}{DF2424}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{sfondocodice}{HTML}{F8F9FA}
+
+%%%%%%%%%%
+% MINTED %
+%%%%%%%%%%
+
+\RequirePackage{minted}
+\tcbuselibrary{minted, breakable}
+
+% Inizializzazione di un contatore
+\newcounter{mintedcnt}
+\counterwithin{mintedcnt}{chapter}
+\renewcommand{\themintedcnt}{\thechapter.\arabic{mintedcnt}}
+
+% La dimensione dei numeri di riga va impostata prima poichè non viene letta correttamente
+\renewcommand{\theFancyVerbLine}{\textcolor{black}{\footnotesize\arabic{FancyVerbLine}}}
+% Configurazione globale per tutti gli ambienti minted del documento
+\setminted{
+    linenos=true,          % Abilita l'indicizzazione dei numeri di riga
+    numbersep=6pt,
+    frame=lines,          % Genera un box perimetrale completo (alternative: lines, topandbottom)
+    fontsize=\normalsize,
+    framesep=1mm,          % Definisce il padding interno (la colla tra testo e bordo)
+    rulecolor=black,       % Colore della linea del box
+    % fontsize=\footnotesize, % Riduce leggermente il font per una migliore resa nel layout
+    autogobble,
+    escapeinside={(*@}{@*)}      % non funziona su stringhe, \|\|
+    %bgcolor=sfondocodice
+}
+
+% \NewDocumentEnvironment sostituisce \newenvironment offrendo un parser più robusto.
+% Firma degli argomenti:
+% O{0.8\textwidth} -> #1: Argomento opzionale (larghezza minipage), default 80% della gabbia
+% m                -> #2: Argomento obbligatorio (linguaggio di programmazione)
+% m                -> #3: Argomento obbligatorio (testo della didascalia)
+% m                -> #4: Argomento obbligatorio (label per i cross-reference)
+
+\DeclareTCBListing{mintedcodebox}{ O{0.8\textwidth} m m }{
+    % Configurazione del motore verbatim
+    listing engine=minted,
+    listing only,
+    minted language=#2,
+    % Configurazione strutturale (sostituisce center e minipage)
+    width=#1,
+    center,
+    % Configurazione estetica del frame (emula frame=single di minted)
+    enhanced,
+    breakable,
+    sharp corners,
+    interior hidden,
+    frame hidden,
+    boxrule=0pt,
+    step=mintedcnt,
+    % Gestione automatizzata di didascalia e label
+    title={#3},
+    detach title, % Rimuove visivamente il titolo dal margine superiore
+    % Inietta la didascalia formattata sotto il riquadro.
+    % \thetcbcounter richiama dinamicamente il numero del listing.
+    after={
+        \par\vspace{-1.8ex}
+        \noindent\centering
+        \small\textbf{Codice \themintedcnt:} #3
+        \par\vspace{1.5ex}
+    },
+    label={lst:\themintedcnt}
+}
+% eseguire pygmentize -L lexers da terminale per vedere i linguaggi disponibili
+
+%%%%%%%%%%%%%%%%%%
+% LISTING CONFIG %
+%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%
+% COMANDI %
+%%%%%%%%%%%
+
+\newcommand{\NumberStyle}[1]{
+    \lstdefinestyle{#1Number}{
+        style=#1,
+        %%%%%
+        numbers=left
+    }
+}
+
+\newcommand{\FrameStyle}[1]{
+    \lstdefinestyle{#1Frame}{
+        style=#1,
+        %%%%%
+        frame=single,
+        framesep=0em,
+        rulesep=0em,
+        xleftmargin=0.75em,
+        xrightmargin=0.75em,
+        framexleftmargin=0.75em,
+        framexrightmargin=0.75em,
+        framextopmargin=0.5em,
+        framexbottommargin=0.5em
+    }
+}
+
+\newcommand{\FrameTBStyle}[1]{
+    \FrameStyle{#1}
+    \lstdefinestyle{#1FrameTB}{
+        style=#1Frame,
+        %%%%%
+        frame=tb,
+        xleftmargin=0em,
+        xrightmargin=0em,
+        framexleftmargin=0em,
+        framexrightmargin=0em
+    }
+}
+
+\newcommand{\FrameTBNumberStyle}[1]{
+    \FrameTBStyle{#1}
+    \NumberStyle{#1FrameTB}
+}
+
+\newcommand{\FrameNumberStyle}[1]{
+    \FrameStyle{#1}
+    \lstdefinestyle{#1FrameNumber}{
+        style=#1Frame,
+        %%%%%
+        xleftmargin=2.75em,
+        framexleftmargin=2.75em,
+        %%%%%
+        numbers=left,
+        numbersep=1em
+    }
+}
+
+% ENV CUSTOM
+\lstnewenvironment{codebox}[2][]
+  {\lstset{#1}%
+    \noindent\minipage[b]{#2}}
+  {\endminipage\hspace{1.2em}}
+
+
+%%%%%%%%%
+% STILI %
+%%%%%%%%%%
+
+\lstset{
+  backgroundcolor=\color{backcolour},
+  commentstyle=\IslamicGreen,
+  keywordstyle=\TrueBlue,
+  stringstyle=\DarkMagenta,
+  breaklines=true,
+  breakatwhitespace=true,
+  columns=flexible,
+  extendedchars=true,
+  upquote=true,
+  tabsize=2,
+  xleftmargin=10pt,
+  numbers=left,
+  numbersep=8pt,
+  keepspaces=true,
+  frame=tblr,
+  escapeinside={(*@}{@*)},
+  %%%%%
+  framerule=0.1em,
+  captionpos=b,
+  aboveskip=\baselineskip,
+  belowskip=\smallskipamount,
+  %%%%%
+  basicstyle=\footnotesize\ttfamily,
+  numberstyle=\footnotesize\color{codeorange},
+  showstringspaces=false
+}
+
+\NumberStyle{default}
+\FrameNumberStyle{default}
+\FrameTBNumberStyle{default}
+
+\lstdefinestyle{monokai}{
+    style=Framedefault,
+    %%%%%
+    backgroundcolor=\color[HTML]{272822},
+    framerule=0em,
+    %%%%%
+    basicstyle=\footnotesize\ttfamily\color[HTML]{F8F8F2},
+    numberstyle=\footnotesize\ttfamily\color[HTML]{272822},
+    commentstyle=\color[HTML]{75715E},
+    keywordstyle=[1]{\color[HTML]{F92672}},
+    keywordstyle=[2]{\color[HTML]{A6E22E}},
+    keywordstyle=[3]{\color[HTML]{AE81FF}},
+    stringstyle=\color[HTML]{E6DB74},
+    %%%%%
+    % otherkeywords={!,.,+,-,*,/,=,<,>,^,|,\&,OR,AND}
+}
+
+\lstdefinestyle{monokaiNumber}{
+    style=monokai,
+    %%%%%
+    xleftmargin=2.75em,
+    framexleftmargin=2.75em,
+    %%%%%
+    numbers=left,
+    numberstyle=\footnotesize\ttfamily\color[HTML]{f8f8f2},
+    numbersep=1em
+}
+
+\lstdefinestyle{c}{
+    language=C,
+    style=default,
+    %%%%%
+    commentstyle=\ForestGreen,
+    keywordstyle=\TrueBlue,
+    stringstyle=\VeronicaPurple,
+    emphstyle=\TrueBlue,
+    %%%%%
+    emph={}
+}
+
+\lstdefinestyle{cpp}{
+    language=C++,
+    style=default,
+    %%%%%
+    commentstyle=\ForestGreen,
+    keywordstyle=\TrueBlue,
+    stringstyle=\VeronicaPurple,
+    emphstyle=\TrueBlue,
+    %%%%%
+    emph={std}
+}
+
+\lstdefinestyle{matlab}{
+    language=matlab,
+    style=default,
+    %%%%%
+    basicstyle=\footnotesize\fontfamily{pcr}\selectfont,
+    numberstyle=\footnotesize\fontfamily{pcr}\selectfont,
+    commentstyle=\ForestGreen,
+    keywordstyle=\TrueBlue,
+    stringstyle=\VeronicaPurple,
+    emphstyle=\TrueBlue,
+    %%%%%
+    emph={clearvars}
+}
+
+\lstdefinestyle{python}{
+    language=python,
+    style=default,
+    %%%%%
+    commentstyle=\FreeSpeechRed,
+    keywordstyle=[1]{\SafetyOrange},
+    keywordstyle=[2]{\DarkMagenta},
+    stringstyle=\IslamicGreen,
+    emphstyle=\SafetyOrange,
+    %%%%%
+    emph={as}
+}
+
+\lstdefinestyle{java}{
+    language=java,
+    style=default,
+    %%%%%
+    commentstyle=\ForestGreen,
+    keywordstyle=\TrueBlue,
+    stringstyle=\VeronicaPurple,
+    emphstyle=\TrueBlue,
+    %%%%%
+    emph={obj}
+}
+
+\lstdefinestyle{latex}{
+    language=TeX,
+    style=default,
+    %%%%%
+    commentstyle=\ForestGreen,
+    keywordstyle=\TrueBlue,
+    stringstyle=\VeronicaPurple,
+    emphstyle=\TrueBlue,
+    %%%%%
+    emph={LaTeX, usepackage, textit, textbf, textsc}
+}
+
+% --- 1. Definizione Colori ---
+\definecolor{opcolor}{HTML}{B124B0}   % Rosa per operatori
+\definecolor{brakcolor}{HTML}{D74C14} % Arancione per parentesi
+\definecolor{keycolor}{HTML}{2469B1} % Blu scuro per keyword
+\definecolor{bggray}{gray}{0.97}          % Grigio chiarissimo per sfondo
+\newcommand{\myAmp}{{\color{opcolor}\&}}
+\newcommand{\myDoll}{{\color{opcolor}\$}}
+\newcommand{\myApic}{{\color{opcolor}\^}}
+\lstdefinestyle{CColorful}{
+    language=C,      % Imposta il C come base (PRIMA di tutto)
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{bggray},
+    keywordstyle=\color{keycolor}\bfseries,
+    commentstyle=\textcolor[HTML]{3D1F96},
+    stringstyle=\textcolor[HTML]{198100},
+    numbers=left,
+    numberstyle=\small\color{gray},
+    frame=single,
+    rulecolor=\color{gray!50},
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    showstringspaces=false,
+    % --- BLOCCO LITERATE ---
+    % Nota: L'intera lista è racchiusa tra { ... } aggiuntivi.
+    % Questo protegge le parentesi ) e le virgole interne dal parser.
+    literate={
+        {+}{{{\color{opcolor}+}}}1
+        {-}{{{\color{opcolor}-}}}1
+        % {*}{{{\color{opcolor}*}}}1
+        % {/}{{{\color{opcolor}/}}}1
+        {=}{{{\color{opcolor}=}}}1
+        {>}{{{\color{opcolor}>}}}1
+        {<}{{{\color{opcolor}<}}}1
+        {!}{{{\color{opcolor}!}}}1
+        {?}{{{\color{opcolor}?}}}1
+        % Ampersand protetta con backslash
+        {&}{\myAmp}1
+        % Parentesi colorate (non danno più errore grazie alle graffe esterne)
+        {)}{{{\color{brakcolor})}}}1
+        {[}{{{\color{brakcolor}[}}}1
+        {]}{{{\color{brakcolor}]}}}1
+        {\{}{{{\color{brakcolor}\{}}}1
+        {\}}{{{\color{brakcolor}\}}}}1
+        % Punteggiatura extra
+    }
+}
+
+\lstdefinestyle{MakeColorful}{
+    language=make,      % Imposta il C come base (PRIMA di tutto)
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{bggray},
+    keywordstyle=\color{keycolor}\bfseries,
+    commentstyle=\color{green!60!black},
+    stringstyle=\textcolor[HTML]{198100},
+    numbers=left,
+    numberstyle=\small\color{gray},
+    frame=single,
+    rulecolor=\color{gray!50},
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    showstringspaces=false,
+    % --- BLOCCO LITERATE ---
+    % Nota: L'intera lista è racchiusa tra { ... } aggiuntivi.
+    % Questo protegge le parentesi ) e le virgole interne dal parser.
+    literate={
+        {+}{{{\color{opcolor}+}}}1
+        {-}{{{\color{opcolor}-}}}1
+        {*}{{{\color{opcolor}*}}}1
+        {/}{{{\color{opcolor}/}}}1
+        {=}{{{\color{opcolor}=}}}1
+        {>}{{{\color{opcolor}>}}}1
+        {:}{{{\color{opcolor}:}}}1
+        {<}{{{\color{opcolor}<}}}1
+        {!}{{{\color{opcolor}!}}}1
+        {@}{{{\color{opcolor}@}}}1
+        {?}{{{\color{opcolor}?}}}1
+        % & deve essere preceduto da backslash
+        {&}{{{\color{opcolor}\&}}}1 
+        % $ deve essere preceduto da backslash
+        {$}{{{\color{opcolor}\$}}}1 
+        % ^ richiede il comando \textasciicircum
+        {^}{{{\color{opcolor}\textasciicircum}}}1
+        % Parentesi colorate (non danno più errore grazie alle graffe esterne)
+        {)}{{{\color{brakcolor})}}}1
+        {[}{{{\color{brakcolor}[}}}1
+        {]}{{{\color{brakcolor}]}}}1
+        {\{}{{{\color{brakcolor}\{}}}1
+        {\}}{{{\color{brakcolor}\}}}}1
+        % Punteggiatura extra
+        {.PHONY}{{{\color{red}.PHONY}}}1
+    }
+}
+
+\lstdefinelanguage
+   [x64]{Assembler}     % add a "x64" dialect of Assembler
+   [x86masm]{Assembler} % based on the "x86masm" dialect
+   % with these extra keywords:
+   {morekeywords={CDQE,CQO,CMPSQ,CMPXCHG16B,JRCXZ,LODSQ,MOVSXD, %
+                  POPFQ,PUSHFQ,SCASQ,STOSQ,IRETQ,RDTSCP,SWAPGS, %
+                  load, %
+                  rax,rdx,rcx,rbx,rsi,rdi,rsp,rbp, %
+                  r8,r8d,r8w,r8b,r9,r9d,r9w,r9b, %
+                  r10,r10d,r10w,r10b,r11,r11d,r11w,r11b, %
+                  r12,r12d,r12w,r12b,r13,r13d,r13w,r13b, %
+                  r14,r14d,r14w,r14b,r15,r15d,r15w,r15b}} % etc.
+
+\endinput

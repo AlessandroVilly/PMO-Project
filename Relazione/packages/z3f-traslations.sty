@@ -1,0 +1,33 @@
+% !TEX root = main.tex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-traslations}[2029/09/01]
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%
+% TRADUZIONI %
+%%%%%%%%%%%%%%
+
+\RequirePackage{z3f-glob}
+\RequirePackage{babel}
+\RequirePackage[autostyle=true]{csquotes}
+
+\DefineBibliographyStrings{english}{
+    backrefpage = {page},
+    backrefpages = {pages}
+}
+
+\DefineBibliographyStrings{french}{
+    backrefpage = {page},
+    backrefpages = {pages}
+}
+
+\DefineBibliographyStrings{italian}{
+    backrefpage = {pagina},
+    backrefpages = {pagine}
+}
+
+\addto\captionsitalian{%
+  \renewcommand{\lstlistingname}{Codice}%
+  \renewcommand{\lstlistlistingname}{Esempi di codice}%
+}
+\endinput

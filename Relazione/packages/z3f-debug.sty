@@ -1,0 +1,38 @@
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3}
+\ProvidesExplPackage{z3f-debug}{2026-09-01}{1.0}{Modulo di debug}
+
+\bool_new:N \g_custom_debug_bool
+
+\keys_define:nn { custom_debug_keys }
+  {
+    debug .bool_set:N = \g_custom_debug_bool,
+    debug .default:n  = true,
+    debug .initial:n  = false
+  }
+
+\ProcessKeyOptions [ custom_debug_keys ]
+
+\bool_if:NTF \g_custom_debug_bool
+  {
+    % Ramo VERO: Debug attivato
+    \setlength{\overfullrule}{5pt}
+    
+    % Inietta l'opzione draft in graphicx PRIMA che venga caricato nel main.tex.
+    % Sostituisce le immagini con bounding box, svelando i marcatori coperti.
+    \PassOptionsToPackage{draft}{graphicx}
+    
+    \RequirePackage{showframe}
+    
+    % Strumento nativo esclusivo per LuaLaTeX: mostra ogni singolo nodo/box tipografico
+    \RequirePackage{lua-visual-debug}
+    
+    \typeout{=== CUSTOM-DEBUG: Modalita' visuale e ispezione nodi Lua ATTIVATA ===}
+  }
+  {
+    % Ramo FALSO: Produzione
+    \setlength{\overfullrule}{0pt}
+    \PassOptionsToPackage{final}{graphicx}
+    \typeout{=== CUSTOM-DEBUG: Modalita' produzione (Final) ===}
+  }
+\endinput

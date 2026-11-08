@@ -1,0 +1,191 @@
+% !TEX root = main.tex
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{z3f-glob}[2026/09/01]
+\DeclareOption{parindent}{
+    \restoreparindent
+}
+
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%
+% MATEMATICA %
+%%%%%%%%%%%%%%
+\RequirePackage{mathtools} % Carica amsmath + estensioni + fix
+\mathtoolsset{mathic=true}
+\RequirePackage{unicode-math}
+\RequirePackage{cancel}
+\RequirePackage{fontspec}
+\DeclarePairedDelimiter{\rbk}{(}{)}
+\DeclarePairedDelimiter{\cbk}{\{}{\}}
+\DeclarePairedDelimiter{\sbk}{[}{]}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% Operatori e formattazione specifica
+\newcommand{\fact}[1]{#1!}
+% L'operatore differenziale richiede una spaziatura dedicata fornita da \mathop{}\!
+\newcommand{\diff}{\mathop{}\!\mathrm{d}}
+\DeclareMathOperator{\tr}{tr}
+
+%%%%%%%%%%%%%%
+% SPAZIATURA %
+%%%%%%%%%%%%%%
+
+% Definizione di un comando utente per riconfigurare gli spazi al volo se necessario
+\newcommand{\setmathspacing}[1]{%
+    \setlength{\abovedisplayskip}{#1}%
+    \setlength{\belowdisplayskip}{#1}%
+    \setlength{\abovedisplayshortskip}{#1}%
+    \setlength{\belowdisplayshortskip}{#1}%
+}
+
+% Applicazione automatica all'inizio del documento
+\AtBeginDocument{%
+    % Valori personalizzati. Modifica questi numeri secondo le tue esigenze.
+    \setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}%
+    \setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}%
+    \setlength{\abovedisplayshortskip}{0pt plus 2pt}%
+    \setlength{\belowdisplayshortskip}{6pt plus 2pt minus 2pt}%
+}
+
+%%%%%%%%
+% FONT %
+%%%%%%%%
+
+% Carica la famiglia Libertinus (Serif, Sans, Mono)
+\setmainfont{Libertinus Serif}[
+    Ligatures=TeX,
+    Numbers=OldStyle % Opzionale: numeri elzeviriani per il testo discorsivo
+]
+
+\setsansfont{Libertinus Sans}[
+    Ligatures=TeX,
+    Scale=MatchLowercase % Sincronizza l'altezza della x (x-height) con il Serif
+]
+\RequirePackage{wela} %handwritten font
+\RequirePackage{calligra} %handwritten font
+\RequirePackage{miama} %handwritten font
+\RequirePackage{aurical} %handwritten font
+
+\setmathfont{LibertinusMath-Regular.otf}[
+    Extension    = .otf,
+    BoldFont     = LibertinusMath-Regular.otf, % Riusiamo il Regular per il Bold
+    BoldFeatures = {FakeBold=2},             % Applicando il grassetto finto
+]
+
+% A questo punto, il sistema SA cos'è il grassetto per Libertinus.
+% Ora possiamo mappare \symbf e \symbfit.
+
+% Mapping per \symbf (Grassetto Dritto)
+\setmathfont{LibertinusMath-Regular.otf}
+[
+    range={bfup},
+    FakeBold=1.5,
+    Scale=MatchLowercase
+]
+
+% Mapping per \symbfit (Grassetto Italico)
+\setmathfont{LibertinusMath-Regular.otf}[
+    range={bfit},
+    FakeBold=1.5,
+    Scale=MatchLowercase
+]
+
+% Patch per i glifi mancanti -> bas
+\setmathfont{STIXTwoMath-Regular.otf}[
+    range={"22BB, "2A1D},
+    Scale=MatchLowercase
+]
+
+
+\setmonofont{JetBrainsMono-Regular}[
+  AutoFakeSlant = 0.2,  
+  Scale=MatchLowercase
+]
+% \setmonofont{Inconsolatazi4}[
+%     Scale=MatchLowercase,
+%     BoldFont=* Bold % Assicura che cerchi la versione Bold
+%]
+
+\RequirePackage{fontawesome5}
+\RequirePackage[
+    nopatch=footnote,
+    final,
+    protrusion=true,
+    expansion=true,
+    tracking=true,
+    factor=1100,
+    stretch=10,
+    shrink=10
+]{microtype}% caricato dopo il font
+
+\RequirePackage[cmyk, table]{xcolor}
+\RequirePackage{lua-ul}
+\newunderlinetype{\innerraiseduline}{%
+    \leaders\vrule height -1.8pt depth 2.5pt\relax
+}
+\NewDocumentCommand{\raiseduline}{m}{%
+    {\innerraiseduline{#1}}%
+}
+
+%%%%%%%%%%%%%%%%
+% BIBLIOGRAFIA %
+%%%%%%%%%%%%%%%%
+
+\RequirePackage[
+    backend=biber,
+    style=numeric-comp,
+    sorting=none,
+    maxbibnames=99,
+    backref=true
+]{biblatex}
+
+%%%%%%%%%%%%%%%%
+% STILE PAGINA %
+%%%%%%%%%%%%%%%%
+
+\RequirePackage[bottom]{footmisc}
+
+\edef\restoreparindent{\parindent=\the\parindent\relax}
+
+\RequirePackage{enumitem}
+\setlist{noitemsep}
+
+\RequirePackage{bm}
+\RequirePackage{esint}
+% Configurazione globale delle note a margine
+\RequirePackage{snotez}
+\setsidenotes{text-format=\footnotesize\sffamily}
+
+%%%%%%%%%%%%%%%%%%%%
+% UNITA' DI MISURA %
+%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{siunitx}
+\DeclareSIUnit\noop{\relax} % siunitx non renderizza unità vuote
+
+%%%%%%%%%%
+% INDICE %
+%%%%%%%%%%
+
+\newcommand{\romantableofcontents}{ % creates a table of contents with roman (i, ii, iii, ...) numbering of the pages
+    \newpage
+    \pagenumbering{roman}
+    \hypersetup{linkcolor = black}
+    \tableofcontents
+    \newpage
+    \pagenumbering{arabic}
+}
+
+
+%%%%%%%%%%%%%%%
+% PIE' PAGINA %
+%%%%%%%%%%%%%%%
+
+\makeatletter
+\def\blindfootnote{\gdef\@thefnmark{}\@footnotetext} % footnote without number
+\makeatother
+
+% Backslash during text
+\def\tbs{\textbackslash}
+\endinput
