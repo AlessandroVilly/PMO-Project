@@ -1,9 +1,0 @@
-[0] Config.pm:328> INFO - This is Biber 2.21
-[0] Config.pm:331> INFO - Logfile is 'aux/main.blg'
-[30] biber:342> INFO - === dom nov  8, 2026, 17:21:45
-[39] Biber.pm:421> INFO - Reading 'aux/main.bcf'
-[68] Biber.pm:1002> INFO - Found 0 citekeys in bib section 0
-[74] bbl.pm:676> INFO - Writing 'aux/main.bbl' with encoding 'UTF-8'
-[74] bbl.pm:779> INFO - Output to aux/main.bbl
-[74] Biber.pm:132> WARN - The file 'aux/main.bcf' does not contain any citations!
-[74] Biber.pm:134> INFO - WARNINGS: 1

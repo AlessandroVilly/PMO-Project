@@ -3,7 +3,7 @@
 # ==========================================
 
 # Nome del file principale (senza l'estensione .tex)
-DOC = main
+DOC = Relazione
 
 # Configurazione dipendente dal Sistema Operativo
 ifeq ($(OS),Windows_NT)

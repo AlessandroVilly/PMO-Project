@@ -1,8 +1,8 @@
-This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)  (format=lualatex 2026.9.1)  8 NOV 2026 17:30
+This is LuaHBTeX, Version 1.24.0 (TeX Live 2026)  (format=lualatex 2026.9.1)  13 NOV 2026 14:32
  system commands enabled.
  file:line:error style messages enabled.
-**main.tex
-(./main.tex
+**Relazione.tex
+(./Relazione.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-03-20>
 Lua module: luaotfload 2024-12-03 v3.29 Lua based OpenType font support
@@ -2980,8 +2980,8 @@ Package cleveref Info: no abbreviation of names on input line 7852.
 )
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
- (./aux/main.aux)
-\openout1 = main.aux
+ (./aux/Relazione.aux)
+\openout1 = Relazione.aux
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 23.
 LaTeX Font Info:    ... okay on input line 23.
@@ -3080,11 +3080,11 @@ Package biblatex Info: LuaTeX detected.
 Package biblatex Info: Automatic encoding selection.
 (biblatex)             Assuming data encoding 'utf8'.
 
-\openout3 = main.bcf
+\openout3 = Relazione.bcf
 Package biblatex Info: Trying to load bibliographic data...
-Package biblatex Info: ... file 'main.bbl' found.
+Package biblatex Info: ... file 'Relazione.bbl' found.
 
-(./aux/main.bbl)
+(./aux/Relazione.bbl)
 Package biblatex Info: Reference section=0 on input line 23.
 Package biblatex Info: Reference segment=0 on input line 23.
 Package translations Info: no dictionary file `translations-basic-dictionary-it
@@ -3257,13 +3257,13 @@ LaTeX Font Info:    Font shape `TU/LibertinusSans(0)/b/n' will be
 (Font)              scaled to size 24.88pt on input line 28.
 Package tocbasic Info: character protrusion at toc deactivated on input line 28
 .
- (./aux/main.toc
+ (./aux/Relazione.toc
 Package cleveref Info: loaded `italian' language definitions on input line 1.
 Package cleveref Info: loaded `italian' language definitions on input line 2.
 )
 \tf@toc=\write6
 
-\openout6 = main.toc
+\openout6 = Relazione.toc
  [1
 
 
@@ -3282,18 +3282,18 @@ LaTeX Font Info:    Font shape `TU/LibertinusSans(0)/b/n' will be
 (Font)              scaled to size 12.0pt on input line 44.
 \g__tcobox_out_iow=\write7
 
-\openout7 = main.listing
+\openout7 = Relazione.listing
 \pydata@fh@0=\write8
 
-\openout8 = _FAD58DE7366495DB4650CFEFAC2FCD61.data.minted
-runsystem(latexminted config  --timestamp 20261108173007 FAD58DE7366495DB4650CFE
-FAC2FCD61)...executed.
-(./aux/_FAD58DE7366495DB4650CFEFAC2FCD61.config.minted)
-runsystem(latexminted cleanconfig  --timestamp 20261108173007 FAD58DE7366495DB46
-50CFEFAC2FCD61)...executed.
+\openout8 = _4954F4E3BD95FDE1209FDA1EB11EBF3D.data.minted
+runsystem(latexminted config  --timestamp 20261113143207 4954F4E3BD95FDE1209FDA1
+EB11EBF3D)...executed.
+(./aux/_4954F4E3BD95FDE1209FDA1EB11EBF3D.config.minted)
+runsystem(latexminted cleanconfig  --timestamp 20261113143207 4954F4E3BD95FDE120
+9FDA1EB11EBF3D)...executed.
 
 (./aux/_minted/default.style.minted)
-(./aux/_minted/77B42079223190D9813707BF80074D3E.highlight.minted
+(./aux/_minted/5B7417B45F9BA2EBD89E7A5CAAB49CA7.highlight.minted
 LaTeX Font Info:    Font shape `TU/JetBrainsMono-Regular(0)/m/n' will be
 (Font)              scaled to size 7.01999pt on input line 1.
 Package microtype Info: Loading generic protrusion settings for font family
@@ -3317,7 +3317,7 @@ warning  (pdf backend): ignoring duplicate destination with the name 'page.1'
 [1
 
 
-] (./aux/main.aux
+] (./aux/Relazione.aux
 Package cleveref Info: loaded `italian' language definitions on input line 13.
 Package cleveref Info: loaded `italian' language definitions on input line 14.
 )
@@ -3563,24 +3563,24 @@ supp-pdf.mkii
 epstopdf-base.sty    2020-01-24 v2.11 Base part for package epstopdf
 epstopdf-sys.cfg    2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
  italian.lbx    2025/07/10 v3.21 biblatex localization (PK/MW)
-    main.bbl
+Relazione.bbl
 ltcaption.sty    2021/01/08 v1.4c longtable captions (AR)
 ./resources/images/logo.png
   uesint.fd    
 T1AuriocusKalligraphicus.fd    2006/01/01 font def. for AuriocusKalligraphicus,
  a calligraphic font along the handwriting of auriocus
   t1wela.fd
-_FAD58DE7366495DB4650CFEFAC2FCD61.config.minted
+_4954F4E3BD95FDE1209FDA1EB11EBF3D.config.minted
 "aux/_minted/default.style.minted"
-aux/_minted/77B42079223190D9813707BF80074D3E.highlight.minted
+aux/_minted/5B7417B45F9BA2EBD89E7A5CAAB49CA7.highlight.minted
  ***********
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package logreq Info: Writing requests to 'main.run.xml'.
+Package logreq Info: Writing requests to 'Relazione.run.xml'.
 
-\openout1 = main.run.xml
+\openout1 = Relazione.run.xml
 )
 
 Here is how much of LuaTeX's memory you used:
@@ -3589,11 +3589,11 @@ Here is how much of LuaTeX's memory you used:
  1048 words of node memory still in use:
    8 hlist, 2 vlist, 2 rule, 1 local_par, 8 glue, 4 kern, 1 penalty, 3 glyph, 26
  attribute, 138 glue_spec, 10 attribute_list, 2 write nodes
-   avail lists: 1:1,2:3712,3:509,4:24,5:478,6:124,7:3564,8:1,9:816,10:26,11:150,
+   avail lists: 1:1,2:3712,3:509,4:24,5:481,6:124,7:3564,8:1,9:816,10:26,11:150,
 12:1
  90661 multiletter control sequences out of 65536+600000
- 124 fonts using 50981463 bytes
- 143i,19n,154p,11284b,2768s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 124 fonts using 50981671 bytes
+ 143i,19n,154p,11289b,2768s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/fonts/jetbrains-mono-fonts/JetBrainsMono-Regular.otf></usr/local/tex
 live/2026/texmf-dist/fonts/opentype/public/libertinus-fonts/LibertinusSans-Bold.
 otf><</home/luke/.texlive2026/texmf-var/fonts/pk/ljfour/public/schulschriften/we
@@ -3601,7 +3601,7 @@ lasl14.429pk>></usr/local/texlive/2026/texmf-dist/fonts/opentype/public/libertin
 us-fonts/LibertinusSerif-Bold.otf></usr/local/texlive/2026/texmf-dist/fonts/open
 type/public/libertinus-fonts/LibertinusSerif-Regular.otf></usr/local/texlive/202
 6/texmf-dist/fonts/type1/public/aurical/AuriocusKalligraphicus.pfb>
-Output written on main.pdf (5 pages, 256757 bytes).
+Output written on Relazione.pdf (5 pages, 256814 bytes).
 
 PDF statistics: 103 PDF objects out of 1000 (max. 8388607)
  56 compressed objects within 1 object stream

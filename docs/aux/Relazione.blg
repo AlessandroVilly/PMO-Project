@@ -1,0 +1,9 @@
+[0] Config.pm:328> INFO - This is Biber 2.21
+[0] Config.pm:331> INFO - Logfile is 'aux/Relazione.blg'
+[30] biber:342> INFO - === ven nov 13, 2026, 14:32:03
+[38] Biber.pm:421> INFO - Reading 'aux/Relazione.bcf'
+[68] Biber.pm:1002> INFO - Found 0 citekeys in bib section 0
+[74] bbl.pm:676> INFO - Writing 'aux/Relazione.bbl' with encoding 'UTF-8'
+[75] bbl.pm:779> INFO - Output to aux/Relazione.bbl
+[75] Biber.pm:132> WARN - The file 'aux/Relazione.bcf' does not contain any citations!
+[75] Biber.pm:134> INFO - WARNINGS: 1
