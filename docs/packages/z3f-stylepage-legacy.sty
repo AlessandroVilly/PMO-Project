@@ -30,25 +30,25 @@
 \renewcommand{\footrulewidth}{0pt}
 
 % Ridefinizione del token \chaptermark per iniettare l'etichetta, il numero e il nome
-\renewcommand{\chaptermark}[1]{\markboth{\thechapter\ \triangleright \ #1}{}}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
 \renewcommand{\sectionmark}[1]{\markright{#1}}
 % Iniezione del layout nell'intestazione (Header)
 % \makebox[\headwidth] costringe il contenuto a occupare l'esatta larghezza della gabbia di testo
 % \quad fornisce una spaziatura rigida tra il filetto elastico e il contenuto testuale
 \fancyhead[C]{%
-  \makebox[\headwidth]{\raisebox{0.14em}{\pgfornamenthan[height=0.8em, symmetry=c]{70}}~\midlinefill\quad{\leftmark \ \triangleright \ \rightmark}\quad\midlinefill~\raisebox{0.14em}{\pgfornamenthan[height=0.8em, symmetry=h]{70}}}%
+  \makebox[\headwidth]{\midlinefill\quad{\leftmark\ -\ \rightmark}\quad\midlinefill}%
 }
 
 % Iniezione del layout nel piè di pagina (Footer)
 \fancyfoot[C]{%
-  \makebox[\headwidth]{\raisebox{0.34em}{\pgfornamenthan[height=0.8em, symmetry=v]{70}}~\midlinefill\quad\thepage\quad\midlinefill~\raisebox{0.34em}{\pgfornamenthan[height=0.8em]{70}}}%
+  \makebox[\headwidth]{\midlinefill\quad\thepage\quad\midlinefill}%
 }
 
 % 1. RIDEFINIAMO IL FORMATO (Obbligatorio per far funzionare la spaziatura)
 % Questo replica lo stile standard "Capitolo X" a capo "Titolo"
-\titleformat{\chapter}[display]
+\titleformat{\chapter}[hang]
   {\normalfont\huge\bfseries\centering} % Stile generale
-  {\raisebox{0.65ex}{{\pgfornament[height=0.8em]{11}}} Capitolo \thechapter~\raisebox{0.65ex}{\pgfornament[height=0.8em]{14}}}          % Etichetta (es. "Capitolo 1")
+  {Capitolo \thechapter :~}          % Etichetta (es. "Capitolo 1")
   {0pt}           % Spazio tra "Capitolo 1" e "Titolo del capitolo"
   {#1}            % Stile del titolo vero e proprio
 
@@ -61,18 +61,18 @@
 % --- Configurazione \section ---
 \titleformat{\section}
   {\normalfont\LARGE\bfseries\centering}
-  {\raisebox{0.55ex}{\pgfornament[height=0.6em]{3}}~\thesection :~}
+  {\thesection ~}
   {0pt}            % Spazio orizzontale tra numero e testo del titolo
-  {#1 \raisebox{0.55ex}{\pgfornament[height=0.6em, symmetry=v]{3}}}
+  {#1}
   
 \titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
 
 % --- Configurazione \subsection ---
 \titleformat{\subsection}
   {\normalfont\Large\bfseries\centering}
-  {\raisebox{0.55ex}{\pgfornament[height=0.4em]{2}}~}
+  {}
   {0pt}
-  {#1~\raisebox{0.55ex}{\pgfornament[height=0.4em, symmetry=v]{2}}}
+  {#1}
   
 \titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 

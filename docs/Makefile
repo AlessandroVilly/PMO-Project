@@ -4,38 +4,41 @@
 
 # Nome del file principale (senza l'estensione .tex)
 DOC = Relazione
+AUX_DIR = build
 
 # Configurazione dipendente dal Sistema Operativo
 ifeq ($(OS),Windows_NT)
-    # Impostazioni per Windows
     SEP = ;
-    COPY_CMD = copy aux\$(DOC).pdf $(DOC).pdf >nul
-    CLEAN_CMD = if exist aux rmdir /S /Q aux & if exist $(DOC).pdf del /Q $(DOC).pdf
+    CLEAN_CMD = if exist $(AUX_DIR) rmdir /S /Q $(AUX_DIR) & if exist $(DOC).pdf del /Q $(DOC).pdf & if exist $(DOC).synctex.gz del /Q $(DOC).synctex.gz
 else
-    # Impostazioni per Linux/macOS
     SEP = :
-    COPY_CMD = cp aux/$(DOC).pdf $(DOC).pdf
-    CLEAN_CMD = rm -rf aux $(DOC).pdf
+    CLEAN_CMD = rm -rf $(AUX_DIR) $(DOC).pdf $(DOC).synctex.gz
 endif
 
 # Esportazione della variabile TEXINPUTS per includere i pacchetti locali
 export TEXINPUTS := ./packages//$(SEP)$(TEXINPUTS)
 
-# Comando e flag base per il motore di compilazione
-LUALATEX_CMD = lualatex -synctex=1 -interaction=nonstopmode -file-line-error -shell-escape
+# Flag comuni per latexmk e LuaLaTeX
+LATEXMK_FLAGS = -lualatex \
+                -auxdir=$(AUX_DIR) \
+                -outdir=. \
+                -emulate-aux-dir \
+                -synctex=1 \
+                -interaction=nonstopmode \
+                -file-line-error \
+                -shell-escape
 
 .PHONY: all watch clean
 
 # Target principale: compilazione standard singola
 all:
-	latexmk -pdf -pdflatex="$(LUALATEX_CMD) %O %S" -outdir=aux $(DOC).tex
-	$(COPY_CMD)
+	latexmk $(LATEXMK_FLAGS) $(DOC).tex
 
-# Target watch: emula il comportamento -pvc per l'anteprima continua
+# Target watch: compilazione continua con aggiornamento diretto del PDF nella root
 watch:
-	latexmk -pdf -pdflatex="$(LUALATEX_CMD) %O %S" -outdir=aux -pvc $(DOC).tex
+	latexmk $(LATEXMK_FLAGS) -pvc $(DOC).tex
 
 # Target clean: rimozione della cartella ausiliaria e dei risultati
 clean:
-	latexmk -C -outdir=aux $(DOC).tex
+	latexmk -C -auxdir=$(AUX_DIR) -outdir=. $(DOC).tex
 	$(CLEAN_CMD)
