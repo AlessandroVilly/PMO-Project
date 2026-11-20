@@ -3,6 +3,8 @@
 
 # Latex
 docs/aux/
+docs/build/
+*.synctex*
 
 # Eclipse
 .classpath
