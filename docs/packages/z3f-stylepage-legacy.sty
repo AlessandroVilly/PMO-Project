@@ -36,7 +36,7 @@
 % \makebox[\headwidth] costringe il contenuto a occupare l'esatta larghezza della gabbia di testo
 % \quad fornisce una spaziatura rigida tra il filetto elastico e il contenuto testuale
 \fancyhead[C]{%
-  \makebox[\headwidth]{\midlinefill\quad{\leftmark\ -\ \rightmark}\quad\midlinefill}%
+  \makebox[\headwidth]{\midlinefill\enspace{\leftmark\enspace\textperiodcentered3\enspace\rightmark}\enspace\midlinefill}%
 }
 
 % Iniezione del layout nel piè di pagina (Footer)
@@ -59,10 +59,10 @@
   {3pt} % <--- SPAZIO DOPO IL TITOLO
 
 % --- Configurazione \section ---
-\titleformat{\section}
+\titleformat{\section}[hang]
   {\normalfont\LARGE\bfseries\centering}
-  {\thesection ~}
-  {0pt}            % Spazio orizzontale tra numero e testo del titolo
+  {\thesection\enspace\textperiodcentered}
+  {0.5em}            % Spazio orizzontale tra numero e testo del titolo
   {#1}
   
 \titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
