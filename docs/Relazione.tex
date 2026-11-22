@@ -47,17 +47,12 @@
 
 % In questa sezione andrà fatta l’analisi dei requisiti e quella del problema, ossia verranno elencate le cose che l’applicazione dovrà fare (requisiti). Nell’analisi dei requisiti dell’applicazione si dovrà spiegare cosa l’applicazione dovrà fare. Non ci si deve concentrare sui particolari problemi, ma esclusivamente su cosa si desidera che l’applicazione faccia.
 
-\section{Requisiti}
-
-Il team di 4 developer si pone come obiettivo di realizzare un gioco 2D in stile 8bit, all’interno del quale un guerriero esplora un ambiente al fine di trovare 3 chiavi. Quest'ultime aprono il portale che identifica la fine del gioco con la vittoria del giocatore. 
-
-Il guerriero può imbattersi in gruppi di nemici che pattugliano determinate aree e che deve sconfiggere per sopravvivere. Un gruppo può essere formato da 1 a N nemici. I nemici sono divisi in: 
+Il team di 4 developer si pone come obiettivo di realizzare un gioco 2D in stile 8bit con il titolo ``Il Signore delle chiavi'', all’interno del quale un guerriero esplora un ambiente al fine di trovare 3 chiavi che aprono un portale, il quale identifica la fine del gioco e la vittoria del giocatore. Il guerriero può imbattersi in gruppi di nemici che pattugliano determinate aree e che deve sconfiggere per sopravvivere. Un gruppo può essere formato da 1 a N nemici. 
+I nemici sono divisi in: 
 \begin{itemize}
-  \item Nemico ``base'' che, una volta sconfitto, ha la possibilità di lasciare a terra una pozione;
-  \item Miniboss: un nemico con statistiche maggiorate(vita/danno/velocità...) a protezione dei forzieri delle chiavi e del portale. Una volta sconfitto, lascia a terra l'arma che ha equipaggiata;
+  \item Nemico ``base'';
+  \item Miniboss, ovvero un nemico con statistiche maggiorate(vita/danno/velocità...) .
 \end{itemize}
-
-I nemici si muovono in percorsi definiti e quando il guerriero entra nel loro raggio d'azione, procedono nella sua direzione.
 
 Le chiavi si trovano all'interno di forzieri locati a loro volta dentro dei dungeon. I dungeon sono altri ambienti disaccoppiati dall'ambiente di partenza:
 \begin{itemize}
@@ -66,50 +61,126 @@ Le chiavi si trovano all'interno di forzieri locati a loro volta dentro dei dung
   \item Labirinto, accessibile attraverso la sua entrata.
 \end{itemize}
 
-Il giocatore può incontrare 4 tipi di oggetti:
+Esistono i seguenti tipi di oggetti interagibili, divisi in 3 categorie:
 \begin{enumerate}
-  \item Trasportabili:
+  \item Trasportabili dal giocatore, a loro volta differenziati in:
   \begin{itemize}
-    \item Consumabili: pozioni che possono essere lasciate a terra dai nemici base sconfitti e che recuperano la salute del giocatore;
-    \item Di missione: chiavi;
-    \item Equipaggiamento: scudo per parare i colpi e una spada forniti all'inizio del gioco. Altre armi che possono sostituire la spada iniziale del giocatore;
+    \item Consumabili: pozioni; 
+    \item Di missione: 3 chiavi;
+    \item Equipaggiamento: scudo, spada ed altre armi;
   \end{itemize}
-  \item Non Trasportabili:
-  \begin{itemize}
-    \item Interagibili: 
-    \begin{itemize}
-      \item Forzieri presenti nella mappa che contengono altri oggetti;
-      \item Portale per la vittoria.
-    \end{itemize}
-  \end{itemize} 
+  \item Non Trasportabili: forzieri presenti nella mappa che contengono altri oggetti;
+  \item \textit{Passaporta}: Porta di una casa, portale della vittoria.
 \end{enumerate}
-Il guerriero può equipaggiare un'arma alla volta, lasciandola cadere in caso di raccolta di quella dei nemici ed un numero limitato di pozioni. Il guerriero può muoversi nelle 4 direzioni principali: su-giù, destra-sinistra.
 
-Il giocatore ha accesso ad una interfaccia che riassume:
+All'inizio del gioco al giocatore viene fornito uno scudo ed una spada. Se la vita viene esaurita, il gioco finisce per game over.
+
+\section{Requisiti}
+
+\subsection{Requisiti funzionali}
+%  Contesto: motore di gioco
+Il motore di gioco deve garantire le seguenti meccaniche:
 \begin{itemize}
-  \item Salute disponibile;
-  \item Pozioni raccolte;
-  \item Chiavi trovate;
-  \item Le statistiche dell'arma a disposizione.
+  \item Un nemico si muove in percorsi definiti e quando il guerriero entra nel suo raggio d'azione, procede in quella direzione.
+  \item I nemici ``base'', una volta sconfitti, hanno una possibilità di lasciare a terra un pozione;
+  \item I Miniboss sono a protezione dei forzieri e del portale. Se sconfitti, lascia a terra l'arma che ha equipaggiata;
+  \item La pozioni può essere consumata per recuperare una quantità definita di salute del giocatore;
+  \item Il portale non può aprirsi con meno di 3 chiavi;
+  \item All'attivazione, lo scudo garantisce un'invulnerabilità di 1 secondo al giocatore;
+  \item Il giocatore:
+  \begin{itemize}
+    \item Può eseguire 4 azioni principali: attacco, difesa, interazione, movimento;
+    \item Può raccogliere le armi e le pozioni lasciate a terra dai nemici;
+    \item Non può avere più di un'arma equipaggiata;
+    \item Non può rimuovere lo scudo dall'inventario;
+    \item Può utilizzare le armi per attaccare i nemici a portata dell'arma.
+    \item Quando muore viene riportato in posizione iniziale ed il livello viene resettato.
+  \end{itemize}
+  \item L'applicazione permette al giocatore di:
+  \begin{itemize}
+    \item Avviare una partita;
+    \item Resettare una partita allo stato iniziale;
+    \item Mettere in pausa la partita;
+    \item Riprendere il gioco;
+    \item Uscire dal gioco.
+  \end{itemize}
+  \item Il motore di gioco deve garantire il corretto spostamento del giocatore gestendo le collisioni;
+  \item Il motore di gioco gestisce in maniera corretta i suoni.
 \end{itemize}
 
-Se la vita viene esaurita, il gioco finisce per game over. Il livello viene resettato al punto di partenza.
-\newpage
-Il giocatore può eseguire 4 azioni principali:
+\subsection{Requisiti non funzionali}
+Inoltre il motore di gioco deve garantire:
 \begin{itemize}
-  \item Attacco;
-  \item Difesa;
-  \item Interazione;
-  \item Movimento.
+  \item Il gioco deve mantenere un frame costante di 60 FPS con tempi di risposta ai comandi inferiori a 50 ms.
+  \item Lo stato del giocatore deve essere leggibile a colpo d'occhio tramite la UI.
+  \item Il gioco non deve andare in crash in caso di input simultanei (es. attacco + movimento + pausa) o durante il reset ripetuto del livello.
 \end{itemize}
+
 
 \section{Modello del dominio}
 
 % In questa sezione si descrive il modello del dominio applicativo, individuando le entità in gioco e in che modo sono in relazione le uno con le altre. Non vanno inserire idee circa possibili soluzioni implementative, ovvero sull’organizzazione interna del software. Infatti, la fase di analisi va effettuata prima del progetto: né il progetto né il software esistono nel momento in cui si effettua l’analisi. La discussione di aspetti propri del software (ossia, della soluzione al problema) appartengono alla sfera della progettazione, e vanno discussi successivamente. È obbligatorio fornire uno schema UML del dominio, che diventerà anche lo scheletro della parte di modello dell’applicazione, ovvero dei suoi elementi costitutivi (in ottica MVC - Model View Controller): se l’analisi è ben fatta, dovreste ottenere una gerarchia di concetti che rappresentano le entità che compongono il problema da risolvere. Un’analisi ben svolta prima di cimentarsi con lo sviluppo rappresenta un notevole aiuto per le fasi successive: è sufficiente descrivere a parole il dominio, quindi estrarre i sostantivi utilizzati, capire il loro ruolo all’interno del problema, le relazioni che intercorrono fra loro, e reificarli in interfacce.
 
-Le entità che entrano in gioco sono: 
+Le entità identificate sono: Player, Environment, Enemy, Item, GameState.
+
+\subsection{Player}
+Il Player può:
+\begin{itemize}
+  \item Player.muoversi -> Environment(coordinate);
+  \item Player.attaccare -> Enemy(danno) 
+  \item Player.difendersi -> Enemy(danno)
+  \item Player.Interazione -> Item(trasportabile/nonTrasportabile)
+  \item Player.morte -> GameState.reset();
+\end{itemize}
+
+\subsection{Environment}
+\begin{itemize}
+  \item Environment.cambiaMappa -> Item(passaporta);
+  \item Environment.generaNemico -> Enemy(tipo);
+  \item Environment.generaItem -> Item(nonTrasportabile);
+  \item Environment.generaPlayer -> Player();
+\end{itemize}
+
+\subsection{Enemy}
+\begin{itemize}
+  \item Enemy.morte() -> Environment()
+  \item Enemy.muovi() --> Environment()
+  \item Enemy.attacco() --> Player()
+  \item Enemy.drop() --> Environment()
+\end{itemize}
+
+\subsection{Item}
+\begin{itemize}
+  \item Item.numero() --> Player()
+  \item Item.azione() --> Player()
+  \item Item.azione() --> Enemy()
+  \item Item.azione() --> Item()
+  \item Item.isCarriable() --> Item()
+  \item Item.passaporta() --> Environment()
+\end{itemize}
+
+\subsubsection{GameState}
+\begin{itemize}
+  \item GameState.reset() -> Environment.generaNemico
+  \item GameState.reset() -> Environment.generaPlayer
+  \item GameState.reset() -> Environment.generaItem
+  \item GameState.pause() -> Enemy.stop()
+  \item GameState.pause() -> Player.stop()
+  \item GameState.resume() -> Player
+  \item GameState.resume() -> Enemy
+  \item GameState.exit() --> Player()
+  \item GameState.exit() --> Enemy()
+  \item GameState.exit() --> Environment()
+\end{itemize}
 
 \chapter{Design}
+
+% Template di Esempio di codice
+\begin{mintedcodebox}{java}{Esempio di funzione in java}
+  public class Esempio() {
+    System.out.println("Banana");
+  }
+\end{mintedcodebox}
 
 \section{Architettura}
 
