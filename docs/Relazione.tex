@@ -69,8 +69,7 @@ Esistono i seguenti tipi di oggetti interagibili, divisi in 3 categorie:
     \item Di missione: 3 chiavi;
     \item Equipaggiamento: scudo, spada ed altre armi;
   \end{itemize}
-  \item Non Trasportabili: forzieri presenti nella mappa che contengono altri oggetti;
-  \item \textit{Passaporta}: Porta di una casa, portale della vittoria.
+  \item Non Trasportabili: forzieri presenti nella mappa che contengono altri oggetti, porta di una casa, portale della vittoria.
 \end{enumerate}
 
 All'inizio del gioco al giocatore viene fornito uno scudo ed una spada. Se la vita viene esaurita, il gioco finisce per game over.
@@ -82,8 +81,8 @@ All'inizio del gioco al giocatore viene fornito uno scudo ed una spada. Se la vi
 Il motore di gioco deve garantire le seguenti meccaniche:
 \begin{itemize}
   \item Un nemico si muove in percorsi definiti e quando il guerriero entra nel suo raggio d'azione, procede in quella direzione.
-  \item I nemici ``base'', una volta sconfitti, hanno una possibilità di lasciare a terra un pozione;
-  \item I Miniboss sono a protezione dei forzieri e del portale. Se sconfitti, lascia a terra l'arma che ha equipaggiata;
+  \item I nemici ``base'' hanno armi diverse e, una volta sconfitti, hanno la possibilità di lasciare a terra un pozione;
+  \item I Miniboss hanno armi ``speciali''; sono a protezione di forzieri e del portale. Se sconfitti, lascia a terra l'arma che ha equipaggiata;
   \item La pozioni può essere consumata per recuperare una quantità definita di salute del giocatore;
   \item Il portale non può aprirsi con meno di 3 chiavi;
   \item All'attivazione, lo scudo garantisce un'invulnerabilità di 1 secondo al giocatore;
@@ -91,6 +90,7 @@ Il motore di gioco deve garantire le seguenti meccaniche:
   \begin{itemize}
     \item Può eseguire 4 azioni principali: attacco, difesa, interazione, movimento;
     \item Può raccogliere le armi e le pozioni lasciate a terra dai nemici;
+    \item Può lasciare a terra l'arma equipaggiata ma non lo scudo;
     \item Non può avere più di un'arma equipaggiata;
     \item Non può rimuovere lo scudo dall'inventario;
     \item Può utilizzare le armi per attaccare i nemici a portata dell'arma.
@@ -121,57 +121,98 @@ Inoltre il motore di gioco deve garantire:
 
 % In questa sezione si descrive il modello del dominio applicativo, individuando le entità in gioco e in che modo sono in relazione le uno con le altre. Non vanno inserire idee circa possibili soluzioni implementative, ovvero sull’organizzazione interna del software. Infatti, la fase di analisi va effettuata prima del progetto: né il progetto né il software esistono nel momento in cui si effettua l’analisi. La discussione di aspetti propri del software (ossia, della soluzione al problema) appartengono alla sfera della progettazione, e vanno discussi successivamente. È obbligatorio fornire uno schema UML del dominio, che diventerà anche lo scheletro della parte di modello dell’applicazione, ovvero dei suoi elementi costitutivi (in ottica MVC - Model View Controller): se l’analisi è ben fatta, dovreste ottenere una gerarchia di concetti che rappresentano le entità che compongono il problema da risolvere. Un’analisi ben svolta prima di cimentarsi con lo sviluppo rappresenta un notevole aiuto per le fasi successive: è sufficiente descrivere a parole il dominio, quindi estrarre i sostantivi utilizzati, capire il loro ruolo all’interno del problema, le relazioni che intercorrono fra loro, e reificarli in interfacce.
 
-Le entità identificate sono: Player, Environment, Enemy, Item, GameState.
 
-\subsection{Player}
-Il Player può:
+È possibile identificare le entità che entrano in gioco con il loro insieme specifico di azioni:
 \begin{itemize}
-  \item Player.muoversi -> Environment(coordinate);
-  \item Player.attaccare -> Enemy(danno) 
-  \item Player.difendersi -> Enemy(danno)
-  \item Player.Interazione -> Item(trasportabile/nonTrasportabile)
-  \item Player.morte -> GameState.reset();
+  \item \texttt{Player} che modella il giocatore;
+  \item \texttt{Enviroment} che si occupa di tutto ciò che riguarda la mappa di gioco e la generazione/rimozione di oggetti e nemici;
+  \item \texttt{CarryableItem} che identifica gli oggetti dell'inventario;
+  \item \texttt{NonCarryableItem} che modella gli oggetti dell'ambiente;
+  \item \texttt{GameState} che comunica all'environment lo stato di gioco.
 \end{itemize}
 
-\subsection{Environment}
+Sia Player che Enemy hanno in comune la capacità di muoversi (\texttt{move()}), attaccare(\texttt{attack()}), lasciare a terra un oggetto (\texttt{drop()}) e prendere danno (\texttt{takeDamage()}), con opportune accortezze:
 \begin{itemize}
-  \item Environment.cambiaMappa -> Item(passaporta);
-  \item Environment.generaNemico -> Enemy(tipo);
-  \item Environment.generaItem -> Item(nonTrasportabile);
-  \item Environment.generaPlayer -> Player();
+  \item Il Player si distingue per le azioni di \texttt{block()}, \texttt{interact()}, \texttt{heal()};
+  \item Il nemico richiama l'azione \texttt{drop()} solo alla morte.
+\end{itemize}
+Si evidenzia la distinzione tra gli oggetti \texttt{CarryableItem} e \texttt{NonCarryableItem} che hanno comportamenti differenti in funzione al loro ruolo:
+\begin{itemize}
+  \item \texttt{NonCarryableItem}: tramite \texttt{interaction()} comunica l'apertura di forziere o l'ingresso in uno scenario;
+  \item \texttt{CarryableItem}: 
+  \begin{itemize}
+    \item tramite \texttt{getCount()} indica il numero di oggetti dello stesso tipo equipaggiati da una determinata Entità;
+    \item tramite \texttt{effect()} produce un effetto su Enemy o Player (aumento di salute, danno).
+  \end{itemize}
 \end{itemize}
 
-\subsection{Enemy}
-\begin{itemize}
-  \item Enemy.morte() -> Environment()
-  \item Enemy.muovi() --> Environment()
-  \item Enemy.attacco() --> Player()
-  \item Enemy.drop() --> Environment()
-\end{itemize}
+% \begin{minipage}{0.40\textwidth}
+%   \includegraphics[scale = 0.3]{image.png}
+% \end{minipage}
 
-\subsection{Item}
-\begin{itemize}
-  \item Item.numero() --> Player()
-  \item Item.azione() --> Player()
-  \item Item.azione() --> Enemy()
-  \item Item.azione() --> Item()
-  \item Item.isCarriable() --> Item()
-  \item Item.passaporta() --> Environment()
-\end{itemize}
+% \begin{figure}[htbp]
+%   \centering
+%   \begin{plantuml}[width=\textwidth]
+% @startuml
+% left to right direction
+% skinparam linetype ortho
+% skinparam monochrome true
+% skinparam shadowing false
+% skinparam classAttributeIconSize 0
 
-\subsubsection{GameState}
-\begin{itemize}
-  \item GameState.reset() -> Environment.generaNemico
-  \item GameState.reset() -> Environment.generaPlayer
-  \item GameState.reset() -> Environment.generaItem
-  \item GameState.pause() -> Enemy.stop()
-  \item GameState.pause() -> Player.stop()
-  \item GameState.resume() -> Player
-  \item GameState.resume() -> Enemy
-  \item GameState.exit() --> Player()
-  \item GameState.exit() --> Enemy()
-  \item GameState.exit() --> Environment()
-\end{itemize}
+% interface GameState {
+% + resetLevel()
+% + pause()
+% + resume()
+% + exit()
+% }
+
+% interface Environment {
+% + playerSpawn()
+% + itemSpawn()
+% + enemySpawn()
+% + deSpawnEntity()
+% + changeScenario()
+% }
+
+% interface Player {
+% + move()
+% + attack()
+% + block()
+% + drop()
+% + heal()
+% + interact()
+% + takeDamage()
+% }
+
+% interface Enemy {
+% + move()
+% + attack()
+% + drop()
+% + takeDamage()
+% }
+
+% interface NonCarryableItem {
+% + interaction()
+% }
+
+% interface CarryableItem {
+% + getCount()
+% + effect()
+% }
+
+% GameState "1" --> "1" Environment
+% Environment "1" o-- "1" Player
+% Environment "1" o-- "0..*" Enemy
+% Environment "1" o-- "0..*" NonCarryableItem
+% Player "1" ..> "0..*" CarryableItem
+% Enemy "0..*" ..> "1" CarryableItem
+% @enduml
+%   \end{plantuml}
+%   \caption{Diagramma delle interfacce di gioco.}
+%   \label{fig:uml-game-interfaces}
+% \end{figure}
+
 
 \chapter{Design}
 
