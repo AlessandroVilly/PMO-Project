@@ -80,14 +80,16 @@
     linktoc=all,
     linkcolor=ColoreLinks,
     urlcolor=urlcolor,
-    pdfauthor={Luca Martinangeli}
-    pdfsubject={Appunti di}, % oggetto
+    pdfauthor={Alessandro, Luca, Camilla, Davide},
+    pdfsubject={Relazione progetto PMO}, % oggetto
     pdfkeywords={}, % Parole chiave
     pdfcreator={LaTeX},
     pdfproducer={lualatex}, % Compilatore
     pdflang={it-IT},
     pdfstartview={XYZ null null FitH},
     }%
+\AddToHook{env/titlepage/begin}{\hypersetup{pageanchor=false}}
+\AddToHook{env/titlepage/after}{\hypersetup{pageanchor=true}}
 \RequirePackage{footnotehyper}% Per compatibilità con hyperref
 \RequirePackage[capitalize, noabbrev, italian]{cleveref}
 \endinput
