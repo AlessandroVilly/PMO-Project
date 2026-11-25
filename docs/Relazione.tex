@@ -6,15 +6,11 @@
 \documentclass[a4paper, italian, 11pt, oneside]{report}
 \usepackage{z3f-preamble}% preambolo -> pacchetti custom -> pacchetti standard
 
-%%%%%%%%%%%%%%%%%%%%
-% NOTE DI UTILIZZO %
-%%%%%%%%%%%%%%%%%%%%
-% Nota 1: Aumentare Margini per rilegatura, bella l'efficienza nello spazio ma poco utile
-% Nota 2: Trovare un'altra grafica per i bordi degli spazi di codice
-% Nota 3: Cercare di rendere dinamico lo spazio di codice
-% Nota 4: Prendere spunto dai template in giro per migliorare lo stile
-% Nota 5: Riordinare i pacchetti in tematiche (ora che compilano)
-% Nota 6: utilizzo di tectonic per la compilazione (rust)
+%%%%%%%%%%
+% TO-DOS %
+%%%%%%%%%%
+% Diagrammi Mermaid da gestire -> content in verticale, ci serve orizzontale
+% Considerare l'uso di PlantUML
 
 %%%%%%%%%%%%
 % SORGENTE %
@@ -131,73 +127,13 @@ Si evidenzia la distinzione tra gli oggetti \texttt{CarryableItem} e \texttt{Non
   \end{itemize}
 \end{itemize}
 
-% \begin{minipage}{0.40\textwidth}
-%   \includegraphics[scale = 0.3]{image.png}
-% \end{minipage}
-
-% \begin{figure}[htbp]
-%   \centering
-%   \begin{plantuml}[width=\textwidth]
-% @startuml
-% left to right direction
-% skinparam linetype ortho
-% skinparam monochrome true
-% skinparam shadowing false
-% skinparam classAttributeIconSize 0
-
-% interface GameState {
-% + resetLevel()
-% + pause()
-% + resume()
-% + exit()
-% }
-
-% interface Environment {
-% + playerSpawn()
-% + itemSpawn()
-% + enemySpawn()
-% + deSpawnEntity()
-% + changeScenario()
-% }
-
-% interface Player {
-% + move()
-% + attack()
-% + block()
-% + drop()
-% + heal()
-% + interact()
-% + takeDamage()
-% }
-
-% interface Enemy {
-% + move()
-% + attack()
-% + drop()
-% + takeDamage()
-% }
-
-% interface NonCarryableItem {
-% + interaction()
-% }
-
-% interface CarryableItem {
-% + getCount()
-% + effect()
-% }
-
-% GameState "1" --> "1" Environment
-% Environment "1" o-- "1" Player
-% Environment "1" o-- "0..*" Enemy
-% Environment "1" o-- "0..*" NonCarryableItem
-% Player "1" ..> "0..*" CarryableItem
-% Enemy "0..*" ..> "1" CarryableItem
-% @enduml
-%   \end{plantuml}
-%   \caption{Diagramma delle interfacce di gioco.}
-%   \label{fig:uml-game-interfaces}
-% \end{figure}
-
+% Prevedere l'enstensibilità direttamente nei requisiti
+% Aggiungere complessità
+% Introdurre una classe Entity madre di Enemy/Player
+% Introdurre la possibilità di un nuovo livello 
+% Evitare di estendere banalmente le entità 
+% Definire chiaramente il carico di lavoro
+% Definire anche il comportamento di Environment nei confronti dei tile
 
 \chapter{Design}
 
