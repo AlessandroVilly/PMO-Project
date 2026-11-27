@@ -2,8 +2,7 @@
 .vscode/
 
 # Latex
-docs/aux/
-docs/build/
+docs/build/aux/
 *.synctex*
 
 # Eclipse
