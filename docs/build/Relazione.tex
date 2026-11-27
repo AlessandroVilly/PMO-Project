@@ -112,7 +112,7 @@ Inoltre il motore di gioco deve garantire:
   \item \texttt{GameState} che comunica all'environment lo stato di gioco.
 \end{itemize}
 
-Sia Player che Enemy hanno in comune la capacità di muoversi (\texttt{move()}), attaccare(\texttt{attack()}), lasciare a terra un oggetto (\texttt{drop()}) e prendere danno (\texttt{takeDamage()}), con opportune accortezze:
+Sia Player che Enemy hanno in comune la capacità di muoversi, attaccare(\texttt{attack()}), lasciare a terra un oggetto (\texttt{drop()}) e prendere danno (\texttt{takeDamage()}), con opportune accortezze:
 \begin{itemize}
   \item Il Player si distingue per le azioni di \texttt{block()}, \texttt{interact()}, \texttt{heal()};
   \item Il nemico richiama l'azione \texttt{drop()} solo alla morte.
@@ -126,6 +126,71 @@ Si evidenzia la distinzione tra gli oggetti \texttt{CarryableItem} e \texttt{Non
     \item tramite \texttt{effect()} produce un effetto su Enemy o Player (aumento di salute, danno).
   \end{itemize}
 \end{itemize}
+\begin{figure}[htbp]
+  \centering
+  \begin{plantuml}
+      @startuml
+      !theme plain
+      skinparam classAttributeIconSize 0
+      left to right direction
+      scale 0.75
+      
+      interface Entity {
+        +attack()
+        +drop()
+        +move()
+        +block()
+        +takeDamage()
+      }
+
+      interface Player {
+          +block()
+          +drop()
+          +heal()
+          +interact()
+      }
+
+      interface CarryableItem {
+          +getCount()
+          +effect()
+      }
+
+      interface NonCarryableItem {
+          +interaction()
+      }
+
+      interface Environment {
+          +playerSpawn()
+          +itemSpawn()
+          +enemySpawn()
+          +deSpawn()
+          +changeScenario()
+      }
+
+      interface Enemy {
+
+      }
+
+      interface GameState {
+          +resetLevel()
+          +pause()
+          +resume()
+          +exit()
+      }
+
+      GameState "1" --> "1" Environment
+      Environment "1" o-- "1..*" Entity
+      Entity "0..*" <|-- "1" Player : extends
+      Entity "0..*" <|-- "1" Enemy
+      Environment "1" o-- "0..*" NonCarryableItem
+      Enemy "0..*" ..> "1" CarryableItem
+      Player "1" ..> "0..*" CarryableItem
+      
+      @enduml
+  \end{plantuml}
+  \caption{Diagramma delle interfacce principali del sistema.}
+  \label{fig:architettura-interfacce}
+\end{figure}
 
 % Prevedere l'enstensibilità direttamente nei requisiti
 % Aggiungere complessità
@@ -147,6 +212,12 @@ Si evidenzia la distinzione tra gli oggetti \texttt{CarryableItem} e \texttt{Non
 \section{Architettura}
 
 \section{Design dettagliato}
+% Ognuno scrive nel proprio file la propria porzione utilizzando le direttive ereditate dal main
+
+\include{components/Ale}
+\include{components/Davide}
+\include{components/Kamy}
+\include{components/Luca}
 
 \chapter{Sviluppo}
 

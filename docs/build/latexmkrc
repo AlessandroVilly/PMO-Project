@@ -1,0 +1,29 @@
+use File::Path qw(make_path);
+use File::Copy;
+
+# Crea le directory in modo portabile (Windows e Linux)
+make_path('build/minted', 'build/tikz');
+
+# Importing dei pacchetti custom
+ensure_path('TEXINPUTS', './packages//', './resources/images//');
+
+# File ausiliari in build/, PDF finale accanto al file .tex
+$aux_dir     = 'aux';
+$out_dir     = '.';
+$emulate_aux = 1;
+
+# Compilatore: Lualatex, più moderno
+$pdf_mode = 4;
+$lualatex = 'lualatex -shell-escape -interaction=nonstopmode -file-line-error -synctex=1 %O %S';
+
+# Percorso del file plantuml.jar
+$ENV{'PLANTUML_JAR'} = './plantuml/plantuml-1.2026.10.jar';
+
+# Solo in caso di successo, esporta il file finale
+$success_cmd = 'internal copy_pdf_up %D %R';
+
+sub copy_pdf_up {
+    my ($source, $root) = @_;
+    copy($source, "../$root.pdf") or warn "Errore nella copia del PDF: $!\n";
+    return 0;
+}
